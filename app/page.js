@@ -1,339 +1,115 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-
-  const weddingDate = new Date("2026-08-05T19:00:00");
-
-  const [time, setTime] = useState({
-    days:0,
-    hours:0,
-    minutes:0,
-    seconds:0
+  // العداد التنازلي لموعد الزفاف
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
-
   useEffect(() => {
+    // تاريخ الزفاف: 5 أغسطس 2026
+    const targetDate = new Date('2026-08-05T19:00:00').getTime();
 
-    const timer = setInterval(() => {
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
 
-      const now = new Date();
-      const distance = weddingDate - now;
-
-
-      if(distance > 0){
-
-        setTime({
-          days: Math.floor(distance/(1000*60*60*24)),
-          hours: Math.floor((distance/(1000*60*60))%24),
-          minutes: Math.floor((distance/(1000*60))%60),
-          seconds: Math.floor((distance/1000)%60)
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
         });
-
       }
+    }, 1000);
 
-    },1000);
-
-
-    return ()=>clearInterval(timer);
-
-  },[]);
-
-
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-
     <main>
+      {/* القسم الأول - الهيرو وبطاقة الدعوة */}
+      <section className="hero-container">
+        <div className="hero-content">
+          <h1 className="names-arabic">محمد & منار</h1>
+          <p className="names-english">Mohammad & Manar</p>
+          
+          <div className="divider"></div>
 
+          <p className="wedding-date">05 August 2026</p>
+          <p className="wedding-day">Wednesday</p>
 
-      {/* HERO */}
-
-      <section className="hero">
-
-
-        <motion.div
-          initial={{opacity:0,y:40}}
-          animate={{opacity:1,y:0}}
-          transition={{duration:1}}
-        >
-
-
-          <p className="small">
-            Together with our families
-          </p>
-
-
-          <h1>
-            محمد & منار
-          </h1>
-
-
-          <h2>
-            Mohammad & Manar
-          </h2>
-
-
-          <div className="date">
-            05 August 2026
-            <br/>
-            الأربعاء | Wednesday
-          </div>
-
-
-          <div className="countdown">
-
-
-            <div>
-              {time.days}
-              <span>Days</span>
-            </div>
-
-
-            <div>
-              {time.hours}
-              <span>Hours</span>
-            </div>
-
-
-            <div>
-              {time.minutes}
-              <span>Minutes</span>
-            </div>
-
-
-            <div>
-              {time.seconds}
-              <span>Seconds</span>
-            </div>
-
-
-          </div>
-
-
-          <p className="scroll">
-            Scroll Down ↓
-          </p>
-
-
-        </motion.div>
-
-
+          <a href="#details" className="open-btn">
+            Open Invitation ↓
+          </a>
+        </div>
       </section>
 
-
-
-
-      {/* INVITATION */}
-
-
-      <motion.section
-        className="section"
-        initial={{opacity:0,y:50}}
-        whileInView={{opacity:1,y:0}}
-        transition={{duration:.8}}
-        viewport={{once:true}}
-      >
-
-
-        <h3>
-          Our Special Day
-        </h3>
-
-
-        <p>
-          يسعدنا دعوتكم لمشاركتنا أجمل لحظات حياتنا
+      {/* القسم الثاني - التفاصيل والدعوة */}
+      <section id="details" className="section">
+        <h2 className="section-title">Our Wedding Day</h2>
+        
+        <p className="section-subtitle">
+          يسعدنا دعوتكم لمشاركتنا فرحتنا في هذا اليوم المميز <br />
+          <span style={{ fontSize: '0.95rem', color: '#6b7280', display: 'block', marginTop: '0.5rem' }}>
+            We would be honored to celebrate this special day with you
+          </span>
         </p>
 
-
-        <p>
-          We would be honored to celebrate
-          this special day with you
-        </p>
-
-
-      </motion.section>
-
-
-
-
-
-      {/* DETAILS */}
-
-
-      <motion.section
-        className="section"
-        initial={{opacity:0,y:50}}
-        whileInView={{opacity:1,y:0}}
-        transition={{duration:.8}}
-        viewport={{once:true}}
-      >
-
-
-        <h3>
-          Wedding Details
-        </h3>
-
-
-        <p>
-          📍 Yildiz Hall
-        </p>
-
-
-        <p>
-          Black Tie - Weddings
-        </p>
-
-
-        <a
-          className="location-btn"
-          href="https://www.google.com/maps/dir//Yildiz+Hall+-+Black+Tie-+Weddings,+QWM6%2BXQ,+Amman/@31.9614981,35.9068476,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x151ca9dbee45f169:0x618aa9a93506d572!2m2!1d35.9119597!2d31.7848898?hl=en-JO&entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D"
-          target="_blank"
-        >
-          Open Location
-        </a>
-
-
-      </motion.section>
-
-
-
-
-
-      {/* DRESS CODE */}
-
-
-      <motion.section
-        className="section"
-        initial={{opacity:0,y:50}}
-        whileInView={{opacity:1,y:0}}
-        transition={{duration:.8}}
-        viewport={{once:true}}
-      >
-
-
-        <h3>
-          🎩 Dress Code
-        </h3>
-
-
-        <p>
-          Black Tie
-        </p>
-
-
-        <p>
-          Elegant Evening Attire
-        </p>
-
-
-      </motion.section>
-
-
-
-
-
-      {/* TIMELINE */}
-
-
-      <motion.section
-        className="section"
-        initial={{opacity:0,y:50}}
-        whileInView={{opacity:1,y:0}}
-        transition={{duration:.8}}
-        viewport={{once:true}}
-      >
-
-
-        <h3>
-          Wedding Timeline
-        </h3>
-
-
-        <p>
-          7:00 PM
-          <br/>
-          Guest Arrival
-        </p>
-
-
-        <p>
-          8:00 PM
-          <br/>
-          Wedding Celebration
-        </p>
-
-
-        <p>
-          10:00 PM
-          <br/>
-          Dinner & Dance
-        </p>
-
-
-      </motion.section>
-
-
-
-
-
-      {/* RSVP */}
-
-
-      <motion.section
-        className="section"
-        initial={{opacity:0,y:50}}
-        whileInView={{opacity:1,y:0}}
-        transition={{duration:.8}}
-        viewport={{once:true}}
-      >
-
-
-        <h3>
-          RSVP
-        </h3>
-
-
-        <p>
-          Will you join us?
-        </p>
-
-
-        <button>
-          Yes, I will attend
-        </button>
-
-
-      </motion.section>
-
-
-
-
-
-      {/* END */}
-
-
-      <section className="section end">
-
-
-        <h1>
-          محمد & منار
-        </h1>
-
-
-        <p>
-          Thank you for being part of our story ❤️
-        </p>
-
-
+        {/* قسم العداد التنازلي */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '1.5rem',
+          margin: '2.5rem 0',
+          direction: 'ltr'
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--navy-primary)' }}>{timeLeft.days}</span>
+            <p style={{ fontSize: '0.85rem', color: 'var(--gold-accent)' }}>Days</p>
+          </div>
+          <div style={{ fontSize: '1.8rem', color: 'var(--gold-accent)' }}>:</div>
+          <div style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--navy-primary)' }}>{timeLeft.hours}</span>
+            <p style={{ fontSize: '0.85rem', color: 'var(--gold-accent)' }}>Hours</p>
+          </div>
+          <div style={{ fontSize: '1.8rem', color: 'var(--gold-accent)' }}>:</div>
+          <div style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--navy-primary)' }}>{timeLeft.minutes}</span>
+            <p style={{ fontSize: '0.85rem', color: 'var(--gold-accent)' }}>Mins</p>
+          </div>
+          <div style={{ fontSize: '1.8rem', color: 'var(--gold-accent)' }}>:</div>
+          <div style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--navy-primary)' }}>{timeLeft.seconds}</span>
+            <p style={{ fontSize: '0.85rem', color: 'var(--gold-accent)' }}>Secs</p>
+          </div>
+        </div>
+
+        {/* تفاصيل الموقع واللبس */}
+        <div style={{
+          background: '#ffffff',
+          padding: '2rem',
+          borderRadius: '12px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+          margin: '2rem 0',
+          border: '1px solid #f0e6d2'
+        }}>
+          <h3 style={{ color: 'var(--navy-primary)', marginBottom: '0.5rem' }}>📍 Venue & Location</h3>
+          <p style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--navy-light)' }}>Yildiz Hall</p>
+          <p style={{ color: '#6b7280', fontSize: '0.9rem', marginTop: '0.25rem' }}>Wednesday, 05 August 2026</p>
+          
+          <div style={{ margin: '1.5rem 0', borderTop: '1px dashed #e5e7eb' }}></div>
+
+          <h3 style={{ color: 'var(--navy-primary)', marginBottom: '0.5rem' }}>👔 Dress Code</h3>
+          <p style={{ color: 'var(--gold-accent)', fontWeight: '600' }}>Black Tie / Formal Navy</p>
+        </div>
       </section>
-
-
-
     </main>
-
   );
-
 }
