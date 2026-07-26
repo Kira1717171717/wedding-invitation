@@ -154,27 +154,6 @@ export default function Home() {
               👆
             </span>
           </button>
-
-          <div style={{
-            position: 'absolute',
-            top: '64%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            textAlign: 'center',
-            pointerEvents: 'none',
-            width: '100%'
-          }}>
-            <p style={{
-              color: '#c5a059',
-              fontSize: '0.85rem',
-              fontWeight: '700',
-              margin: 0,
-              textShadow: '0 2px 4px rgba(0,0,0,0.9)',
-              letterSpacing: '1px'
-            }}>
-              اضغط على الختم لفتح الدعوة 💌
-            </p>
-          </div>
         </div>
       )}
 
