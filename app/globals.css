@@ -2,114 +2,198 @@
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #07152f;
-  color: #f5d77a;
+html {
+  scroll-behavior: smooth;
 }
 
-.container {
+body {
+  margin: 0;
+  background: #07152f;
+  color: #ffffff;
+  font-family: "Georgia", serif;
+  text-align: center;
+}
+
+main {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.hero {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 40px 20px;
   background:
-    radial-gradient(circle at top, #162d55, #07152f);
+    linear-gradient(
+      rgba(7,21,47,0.85),
+      rgba(7,21,47,1)
+    );
 }
 
-.card {
-  width: 100%;
-  max-width: 500px;
-  text-align: center;
-  padding: 40px 25px;
-  border: 1px solid #c9a646;
-  border-radius: 25px;
-  background: rgba(5, 15, 35, 0.85);
-  box-shadow: 0 0 40px rgba(201,166,70,0.25);
+
+.small {
+  color: #d4af37;
+  font-size: 18px;
+  letter-spacing: 2px;
 }
+
 
 h1 {
-  font-size: 48px;
-  margin: 0;
-  font-family: serif;
+  margin: 20px 0 5px;
+  font-size: 65px;
+  color: #d4af37;
+  font-weight: 500;
 }
+
 
 h2 {
-  font-size: 28px;
-  margin-top: 10px;
-  color: #fff;
+  margin: 0;
+  font-size: 35px;
+  color: white;
+  font-weight: 400;
 }
+
 
 .date {
-  margin: 30px 0;
-  font-size: 22px;
-  line-height: 1.6;
+  margin-top: 40px;
+  font-size: 25px;
+  line-height: 1.8;
 }
+
 
 .countdown {
+  margin-top: 40px;
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin: 30px 0;
-  direction: ltr;
+  gap: 15px;
+  flex-wrap: wrap;
 }
+
 
 .countdown div {
-  background: #c9a646;
-  color: #07152f;
-  padding: 15px 10px;
-  border-radius: 12px;
-  min-width: 70px;
-  font-size: 25px;
-  font-weight: bold;
+  width: 90px;
+  height: 90px;
+  border: 1px solid #d4af37;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #d4af37;
+  font-size: 28px;
 }
+
 
 .countdown span {
-  display: block;
   font-size: 12px;
-  margin-top: 5px;
-}
-
-section {
-  margin: 25px 0;
-}
-
-section h3 {
-  font-size: 22px;
-}
-
-section p {
   color: white;
 }
+
+
+.scroll {
+  margin-top: 60px;
+  color: #d4af37;
+  font-size: 18px;
+}
+
+
+
+.section {
+
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 60px 25px;
+
+  border-top: 1px solid rgba(212,175,55,0.3);
+
+}
+
+
+.section h3 {
+
+  font-size: 40px;
+  color: #d4af37;
+  margin-bottom: 30px;
+
+}
+
+
+.section p {
+
+  max-width: 600px;
+  font-size: 22px;
+  line-height: 2;
+}
+
 
 button {
-  margin-top: 20px;
-  padding: 14px 35px;
-  border-radius: 30px;
-  border: none;
-  background: #c9a646;
-  color: #07152f;
-  font-size: 17px;
+
+  margin-top: 30px;
+
+  padding: 15px 40px;
+
+  border-radius: 50px;
+
+  border: 1px solid #d4af37;
+
+  background: transparent;
+
+  color: #d4af37;
+
+  font-size: 18px;
+
   cursor: pointer;
+
 }
 
-.message {
-  margin-top: 30px;
-  line-height: 1.8;
-  color: white;
+
+button:hover {
+
+  background: #d4af37;
+  color: #07152f;
+
 }
+
+
+.end {
+
+  min-height: 50vh;
+
+}
+
+
 
 @media(max-width:600px){
 
   h1 {
-    font-size: 38px;
+    font-size: 45px;
   }
 
-  .countdown div {
-    min-width: 60px;
+
+  h2 {
+    font-size: 25px;
+  }
+
+
+  .date {
     font-size: 20px;
   }
+
+
+  .section h3 {
+    font-size: 32px;
+  }
+
+
+  .section p {
+    font-size: 18px;
+  }
+
 
 }
