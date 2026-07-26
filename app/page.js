@@ -34,92 +34,74 @@ export default function Home() {
   return (
     <main style={{ 
       direction: 'rtl',
-      scrollSnapType: 'y mandatory',
-      overflowY: 'scroll',
-      height: '100vh',
+      minHeight: '100vh',
       backgroundImage: "url('/wedding-bg.jpg')",
-      backgroundAttachment: 'fixed', /* تثبيت الصورة لتكون امتداد لكل الصفحات */
+      backgroundAttachment: 'fixed', /* يجعل الصورة ثابتة وممتدة مع السكرول */
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover'
+      backgroundSize: 'cover',
+      padding: '2rem 1rem 4rem 1rem',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '3rem' /* مسافة بين الكروت للتصفح بالسكرول */
     }}>
       
-      {/* ================= الصفحة الأولى: الغلاف الأساسي ================= */}
-      <section id="page1" style={{
-        height: '100vh',
+      {/* ================= القسم الأول: الغلاف والأسماء ================= */}
+      <section style={{
+        minHeight: '85vh',
         width: '100%',
-        scrollSnapAlign: 'start',
+        maxWidth: '430px',
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
-        padding: '1rem',
-        boxSizing: 'border-box'
+        alignItems: 'center'
       }}>
         <div style={{
-          maxWidth: '400px',
-          width: '90%',
+          width: '100%',
           textAlign: 'center',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '0.4rem',
-          backgroundColor: 'rgba(255, 255, 255, 0.4)',
-          backdropFilter: 'blur(3px)',
-          padding: '2rem 1rem',
-          borderRadius: '20px',
-          border: '1px solid rgba(197, 160, 89, 0.3)'
+          backgroundColor: 'rgba(255, 255, 255, 0.45)',
+          backdropFilter: 'blur(4px)',
+          padding: '2.5rem 1.5rem',
+          borderRadius: '24px',
+          border: '1px solid rgba(197, 160, 89, 0.4)',
+          boxShadow: '0 8px 32px rgba(26, 43, 76, 0.08)'
         }}>
-          <p style={{ fontSize: '0.8rem', letterSpacing: '2px', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
+          <p style={{ fontSize: '0.85rem', letterSpacing: '2px', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
             WEDDING INVITATION
           </p>
-          <h1 style={{ fontSize: '2.4rem', fontWeight: '700', color: '#1a2b4c', margin: '0.2rem 0', fontFamily: 'serif' }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '700', color: '#1a2b4c', margin: '0.2rem 0', fontFamily: 'serif' }}>
             محمد & منار
           </h1>
-          <p style={{ fontFamily: 'serif', fontSize: '1.2rem', color: '#2c436e', margin: 0, fontStyle: 'italic' }}>
+          <p style={{ fontFamily: 'serif', fontSize: '1.25rem', color: '#2c436e', margin: 0, fontStyle: 'italic' }}>
             Mohammad & Manar
           </p>
-          <div style={{ width: '40px', height: '1px', backgroundColor: '#c5a059', margin: '0.5rem 0' }}></div>
+          <div style={{ width: '50px', height: '1px', backgroundColor: '#c5a059', margin: '0.6rem 0' }}></div>
           <p style={{ fontSize: '1.1rem', color: '#1a2b4c', fontWeight: '700', margin: 0 }}>
             05 August 2026
           </p>
-          <a 
-            href="#page2" 
-            style={{
-              marginTop: '1.2rem',
-              padding: '0.5rem 1.4rem',
-              backgroundColor: '#1a2b4c',
-              color: '#ffffff',
-              borderRadius: '50px',
-              textDecoration: 'none',
-              fontSize: '0.85rem',
-              fontWeight: '600',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-            }}
-          >
-            افتح الدعوة ↓
-          </a>
+
+          <p style={{ marginTop: '1.5rem', fontSize: '0.85rem', color: '#1a2b4c', fontWeight: '600' }}>
+            اسحب للأسفل لقراءة الدعوة ↓
+          </p>
         </div>
       </section>
 
-      {/* ================= الصفحة الثانية: نص الدعوة الرسمي ================= */}
-      <section id="page2" style={{
-        height: '100vh',
+      {/* ================= القسم الثاني: نص الدعوة الرسمي ================= */}
+      <section style={{
         width: '100%',
-        scrollSnapAlign: 'start',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '1.5rem',
-        boxSizing: 'border-box'
+        maxWidth: '430px'
       }}>
         <div style={{
-          maxWidth: '420px',
-          width: '100%',
-          backgroundColor: 'rgba(255, 255, 255, 0.85)',
-          backdropFilter: 'blur(8px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.88)',
+          backdropFilter: 'blur(10px)',
           padding: '2.5rem 1.5rem',
-          borderRadius: '20px',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+          borderRadius: '24px',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
           border: '1px solid #f0e6d2',
           textAlign: 'center',
           display: 'flex',
@@ -127,42 +109,31 @@ export default function Home() {
           alignItems: 'center',
           gap: '1rem'
         }}>
-          <span style={{ fontSize: '2rem', color: '#c5a059' }}>💍</span>
+          <span style={{ fontSize: '2.2rem', color: '#c5a059' }}>💍</span>
           <h2 style={{ fontFamily: 'serif', fontSize: '1.8rem', color: '#1a2b4c', margin: 0 }}>
             دعوة عقد قران
           </h2>
           <div style={{ width: '50px', height: '1px', backgroundColor: '#c5a059' }}></div>
-          <p style={{ fontSize: '1rem', color: '#2c436e', lineHeight: '1.8', margin: 0 }}>
+          <p style={{ fontSize: '1.05rem', color: '#2c436e', lineHeight: '1.8', margin: 0, fontWeight: '600' }}>
             "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"
           </p>
-          <p style={{ fontSize: '0.95rem', color: '#4b5563', lineHeight: '1.6', margin: 0 }}>
+          <p style={{ fontSize: '0.95rem', color: '#4b5563', lineHeight: '1.7', margin: 0 }}>
             يسعدنا ويشرفنا دعوتكم لمشاركتنا أثمن لحظات العمر وأجملها في حفل زفافنا. حضوركم يكتمل به فرحنا وتكتمل به مسرتنا.
           </p>
-          <a href="#page3" style={{ marginTop: '0.8rem', color: '#c5a059', textDecoration: 'none', fontWeight: '700', fontSize: '0.85rem' }}>
-            العداد التنازلي ↓
-          </a>
         </div>
       </section>
 
-      {/* ================= الصفحة الثالثة: العداد التنازلي والـ Dress Code ================= */}
-      <section id="page3" style={{
-        height: '100vh',
+      {/* ================= القسم الثالث: العداد التنازلي والـ Dress Code ================= */}
+      <section style={{
         width: '100%',
-        scrollSnapAlign: 'start',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '1.5rem',
-        boxSizing: 'border-box'
+        maxWidth: '430px'
       }}>
         <div style={{
-          maxWidth: '420px',
-          width: '100%',
-          backgroundColor: 'rgba(255, 255, 255, 0.85)',
-          backdropFilter: 'blur(8px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.88)',
+          backdropFilter: 'blur(10px)',
           padding: '2.5rem 1.5rem',
-          borderRadius: '20px',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+          borderRadius: '24px',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
           border: '1px solid #f0e6d2',
           textAlign: 'center'
         }}>
@@ -179,22 +150,22 @@ export default function Home() {
           }}>
             <div style={{ minWidth: '50px' }}>
               <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#1a2b4c' }}>{timeLeft.days}</span>
-              <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0 }}>أيام</p>
+              <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>أيام</p>
             </div>
             <div style={{ fontSize: '1.5rem', color: '#c5a059' }}>:</div>
             <div style={{ minWidth: '50px' }}>
               <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#1a2b4c' }}>{timeLeft.hours}</span>
-              <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0 }}>ساعات</p>
+              <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>ساعات</p>
             </div>
             <div style={{ fontSize: '1.5rem', color: '#c5a059' }}>:</div>
             <div style={{ minWidth: '50px' }}>
               <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#1a2b4c' }}>{timeLeft.minutes}</span>
-              <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0 }}>دقائق</p>
+              <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>دقائق</p>
             </div>
             <div style={{ fontSize: '1.5rem', color: '#c5a059' }}>:</div>
             <div style={{ minWidth: '50px' }}>
               <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#1a2b4c' }}>{timeLeft.seconds}</span>
-              <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0 }}>ثواني</p>
+              <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>ثواني</p>
             </div>
           </div>
 
@@ -204,32 +175,20 @@ export default function Home() {
           <p style={{ color: '#c5a059', fontWeight: '700', fontSize: '1rem', margin: 0 }}>
             Black Tie / Formal Navy
           </p>
-
-          <a href="#page4" style={{ display: 'inline-block', marginTop: '1.5rem', color: '#1a2b4c', textDecoration: 'none', fontWeight: '700', fontSize: '0.85rem' }}>
-            الموقع والخريطة ↓
-          </a>
         </div>
       </section>
 
-      {/* ================= الصفحة الرابعة: المكان والزمان ================= */}
-      <section id="page4" style={{
-        height: '100vh',
+      {/* ================= القسم الرابع: المكان وتأكيد الحضور ================= */}
+      <section style={{
         width: '100%',
-        scrollSnapAlign: 'start',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '1.5rem',
-        boxSizing: 'border-box'
+        maxWidth: '430px'
       }}>
         <div style={{
-          maxWidth: '420px',
-          width: '100%',
-          backgroundColor: 'rgba(255, 255, 255, 0.85)',
-          backdropFilter: 'blur(8px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.88)',
+          backdropFilter: 'blur(10px)',
           padding: '2.5rem 1.5rem',
-          borderRadius: '20px',
-          boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+          borderRadius: '24px',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
           border: '1px solid #f0e6d2',
           textAlign: 'center',
           display: 'flex',
@@ -237,7 +196,7 @@ export default function Home() {
           alignItems: 'center',
           gap: '1rem'
         }}>
-          <span style={{ fontSize: '2rem' }}>📍</span>
+          <span style={{ fontSize: '2.2rem' }}>📍</span>
           <h2 style={{ fontFamily: 'serif', fontSize: '1.6rem', color: '#1a2b4c', margin: 0 }}>
             المكان والزمان
           </h2>
@@ -253,7 +212,7 @@ export default function Home() {
             target="_blank" 
             rel="noopener noreferrer"
             style={{
-              padding: '0.6rem 1.4rem',
+              padding: '0.75rem 1.6rem',
               backgroundColor: '#1a2b4c',
               color: '#ffffff',
               borderRadius: '50px',
@@ -261,7 +220,7 @@ export default function Home() {
               fontSize: '0.85rem',
               fontWeight: '600',
               marginTop: '0.5rem',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+              boxShadow: '0 4px 15px rgba(26, 43, 76, 0.2)'
             }}
           >
             فتح الموقع على Google Maps 🗺️
@@ -269,7 +228,7 @@ export default function Home() {
 
           <div style={{ borderTop: '1px dashed #c5a059', width: '100%', margin: '0.5rem 0' }}></div>
 
-          <p style={{ fontSize: '0.9rem', color: '#1a2b4c', margin: 0, fontWeight: '600' }}>
+          <p style={{ fontSize: '0.95rem', color: '#1a2b4c', margin: 0, fontWeight: '600' }}>
             أهلاً وسهلاً بكم، ننتظركم بشوق! ✨
           </p>
         </div>
