@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState({
@@ -10,8 +10,32 @@ export default function Home() {
     seconds: 0,
   });
 
+  const section1 = useRef(null);
+  const section2 = useRef(null);
+  const section3 = useRef(null);
+  const section4 = useRef(null);
+  const sections = [section1, section2, section3, section4];
+  
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // نظام النزول التلقائي (كل 5 ثواني)
   useEffect(() => {
-    // موعد الزفاف: الأربعاء 05 أغسطس 2026
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % sections.length;
+        sections[nextIndex].current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+        return nextIndex;
+      });
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // نظام العداد التنازلي
+  useEffect(() => {
     const targetDate = new Date('2026-08-05T19:00:00').getTime();
 
     const interval = setInterval(() => {
@@ -31,24 +55,48 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  // التنقل اليدوي عند الضغط على زر السكرول
+  const scrollToNext = (index) => {
+    const nextIndex = (index + 1) % sections.length;
+    setCurrentIndex(nextIndex);
+    sections[nextIndex].current?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+
   return (
     <main style={{ 
       direction: 'rtl',
-      minHeight: '100vh',
+      height: '100vh',
+      overflowY: 'scroll',
+      scrollSnapType: 'y mandatory',
+      scrollBehavior: 'smooth',
       position: 'relative',
       backgroundColor: '#f8f4ee'
     }}>
 
-      {/* استدعاء الخط الكوفي الناعم والفاخر من Google Fonts */}
+      {/* استدعاء الخط الكوفي وتأثير الأزرار */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap');
         
         body, main {
           font-family: 'Noto Kufi Arabic', sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+
+        @keyframes bounce {
+          0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+          40% { transform: translateY(-5px); }
+          60% { transform: translateY(-3px); }
+        }
+        .scroll-btn {
+          animation: bounce 2s infinite;
         }
       `}</style>
 
-      {/* خلفية الصورة الثابتة - ممتدة ومتناسقة مع أبعاد الموبايل */}
+      {/* خلفية الصورة الثابتة */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -58,209 +106,267 @@ export default function Home() {
         backgroundImage: "url('/wedding-bg.jpg')",
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover', /* تغطي كافة الشاشة بدون أطراف فرغة */
+        backgroundSize: 'cover',
         zIndex: 1,
         pointerEvents: 'none'
       }} />
 
-      {/* طبقة المحتوى الشفافة المتركزة بالفراغ والمتحركة بالسكرول */}
+      {/* الحاوية الرئيسية للمحتوى (فوق الصورة) */}
       <div style={{
         position: 'relative',
         zIndex: 2,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        padding: '2rem 1rem'
+        alignItems: 'center'
       }}>
 
-        {/* ================= القسم الأول: غلاف الدعوة والأسماء ================= */}
-        <section style={{
+        {/* ================= القسم الأول: غلاف الدعوة ================= */}
+        <section ref={section1} style={{
           height: '100vh',
           width: '100%',
           maxWidth: '380px',
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           alignItems: 'center',
+          paddingTop: '38vh', /* إزاحة كبيرة لضمان البدء تحت الثريا */
+          boxSizing: 'border-box',
           textAlign: 'center'
         }}>
           <div style={{
-            width: '80%',
+            width: '85%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '0.4rem',
-            textShadow: '0 1px 2px rgba(255,255,255,0.8)' /* ظلال خفيفة لسهولة القراءة مباشرة فوق الخلفية */
+            gap: '0.3rem',
+            textShadow: '0 1px 2px rgba(255,255,255,0.85)' /* ظل خفيف جداً لبروز النص بدون خلفية */
           }}>
-            <p style={{ fontSize: '0.75rem', letterSpacing: '2.5px', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
+            <p style={{ fontSize: '0.75rem', letterSpacing: '2px', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
               WEDDING INVITATION
             </p>
-            <p style={{ fontSize: '0.85rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>
+            <p style={{ fontSize: '0.85rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>
               دعـوة زفــاف
             </p>
-            <h1 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#1a2b4c', margin: '0.4rem 0' }}>
+            <h1 style={{ fontSize: '2.1rem', fontWeight: '800', color: '#1a2b4c', margin: '0.2rem 0' }}>
               محمد & منار
             </h1>
-            <p style={{ fontSize: '1.15rem', color: '#2c436e', margin: 0, fontWeight: '600', letterSpacing: '1px' }}>
+            <p style={{ fontSize: '1.1rem', color: '#2c436e', margin: 0, fontWeight: '600' }}>
               Mohammad & Manar
             </p>
-            <div style={{ width: '45px', height: '1.5px', backgroundColor: '#c5a059', margin: '0.6rem auto' }}></div>
-            <p style={{ fontSize: '0.95rem', color: '#1a2b4c', fontWeight: '700', margin: 0 }}>
+            <div style={{ width: '40px', height: '1.5px', backgroundColor: '#c5a059', margin: '0.5rem 0' }}></div>
+            <p style={{ fontSize: '0.9rem', color: '#1a2b4c', fontWeight: '700', margin: 0 }}>
               الأربعاء ، 05 أغسطس 2026
             </p>
-            <p style={{ fontSize: '0.8rem', color: '#6b7280', margin: 0, fontWeight: '600' }}>
+            <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: 0, fontWeight: '600' }}>
               Wednesday, August 5, 2026
             </p>
 
-            <p style={{ marginTop: '2.5rem', fontSize: '0.75rem', color: '#c5a059', fontWeight: '700' }}>
-              اسحب للأسفل ↓ Scroll Down
-            </p>
+            <button 
+              onClick={() => scrollToNext(0)}
+              className="scroll-btn"
+              style={{
+                marginTop: '1.2rem',
+                background: 'transparent',
+                border: '1.5px solid #c5a059',
+                borderRadius: '20px',
+                padding: '0.3rem 1rem',
+                color: '#1a2b4c',
+                fontSize: '0.75rem',
+                fontWeight: '700',
+                cursor: 'pointer'
+              }}
+            >
+              التالي ↓ Next
+            </button>
           </div>
         </section>
 
-        {/* ================= القسم الثاني: نص الدعوة الرسمي باللغتين ================= */}
-        <section style={{
+        {/* ================= القسم الثاني: نص الدعوة ================= */}
+        <section ref={section2} style={{
           height: '100vh',
           width: '100%',
           maxWidth: '380px',
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           alignItems: 'center',
+          paddingTop: '38vh',
+          boxSizing: 'border-box',
           textAlign: 'center'
         }}>
           <div style={{
-            width: '82%',
+            width: '85%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '0.7rem',
-            textShadow: '0 1px 2px rgba(255,255,255,0.8)'
+            gap: '0.5rem',
+            textShadow: '0 1px 2px rgba(255,255,255,0.85)'
           }}>
-            <span style={{ fontSize: '1.8rem' }}>💍</span>
-            <h2 style={{ fontSize: '1.5rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
+            <span style={{ fontSize: '1.5rem' }}>💍</span>
+            <h2 style={{ fontSize: '1.3rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
               دعوة عقد قران
             </h2>
-            <p style={{ fontSize: '0.8rem', color: '#c5a059', margin: 0, fontWeight: '600', letterSpacing: '1px' }}>
+            <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>
               OFFICIAL INVITATION
             </p>
 
             <div style={{ width: '40px', height: '1px', backgroundColor: '#c5a059', margin: '0.3rem 0' }}></div>
 
-            <p style={{ fontSize: '0.88rem', color: '#2c436e', lineHeight: '1.8', margin: 0, fontWeight: '600' }}>
+            <p style={{ fontSize: '0.85rem', color: '#2c436e', lineHeight: '1.7', margin: 0, fontWeight: '600' }}>
               "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"
             </p>
 
-            <p style={{ fontSize: '0.82rem', color: '#4b5563', lineHeight: '1.7', margin: '0.5rem 0 0 0' }}>
-              يسعدنا ويشرفنا دعوتكم لمشاركتنا أثمن لحظات العمر وأجملها في حفل زفافنا. حضوركم يكتمل به فرحنا.
+            <p style={{ fontSize: '0.75rem', color: '#4b5563', lineHeight: '1.6', margin: '0.3rem 0 0 0' }}>
+              يسعدنا ويشرفنا دعوتكم لمشاركتنا أثمن لحظات العمر وأجملها في حفل زفافنا.
             </p>
-            <p style={{ fontSize: '0.75rem', color: '#6b7280', lineHeight: '1.5', margin: 0, fontStyle: 'italic' }}>
-              We cordially invite you to celebrate our special day with us. Your presence will honor us.
-            </p>
+
+            <button 
+              onClick={() => scrollToNext(1)}
+              className="scroll-btn"
+              style={{
+                marginTop: '1rem',
+                background: 'transparent',
+                border: '1.5px solid #c5a059',
+                borderRadius: '20px',
+                padding: '0.3rem 1rem',
+                color: '#1a2b4c',
+                fontSize: '0.75rem',
+                fontWeight: '700',
+                cursor: 'pointer'
+              }}
+            >
+              التالي ↓ Next
+            </button>
           </div>
         </section>
 
-        {/* ================= القسم الثالث: العداد التنازلي والـ Dress Code ================= */}
-        <section style={{
+        {/* ================= القسم الثالث: العداد واللباس ================= */}
+        <section ref={section3} style={{
           height: '100vh',
           width: '100%',
           maxWidth: '380px',
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           alignItems: 'center',
+          paddingTop: '38vh',
+          boxSizing: 'border-box',
           textAlign: 'center'
         }}>
           <div style={{
-            width: '82%',
+            width: '85%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '0.6rem',
-            textShadow: '0 1px 2px rgba(255,255,255,0.8)'
+            gap: '0.5rem',
+            textShadow: '0 1px 2px rgba(255,255,255,0.85)'
           }}>
-            <h2 style={{ fontSize: '1.35rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
-              العد التنازلي لليوم الموعود
+            <h2 style={{ fontSize: '1.2rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
+              العد التنازلي
             </h2>
-            <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600', letterSpacing: '1px' }}>
-              COUNTDOWN TO THE BIG DAY
+            <p style={{ fontSize: '0.7rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>
+              COUNTDOWN
             </p>
 
-            {/* أرقام العد التنازلي */}
             <div style={{
               display: 'flex',
               justifyContent: 'center',
-              gap: '0.8rem',
-              margin: '0.8rem 0',
+              gap: '0.5rem',
+              margin: '0.5rem 0',
               direction: 'ltr'
             }}>
-              <div style={{ minWidth: '42px' }}>
-                <span style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.days}</span>
-                <p style={{ fontSize: '0.65rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>أيام / Days</p>
+              <div style={{ minWidth: '40px' }}>
+                <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.days}</span>
+                <p style={{ fontSize: '0.6rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>أيام</p>
               </div>
-              <div style={{ fontSize: '1.2rem', color: '#c5a059' }}>:</div>
-              <div style={{ minWidth: '42px' }}>
-                <span style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.hours}</span>
-                <p style={{ fontSize: '0.65rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>ساعات / Hrs</p>
+              <div style={{ fontSize: '1.1rem', color: '#c5a059' }}>:</div>
+              <div style={{ minWidth: '40px' }}>
+                <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.hours}</span>
+                <p style={{ fontSize: '0.6rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>ساعات</p>
               </div>
-              <div style={{ fontSize: '1.2rem', color: '#c5a059' }}>:</div>
-              <div style={{ minWidth: '42px' }}>
-                <span style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.minutes}</span>
-                <p style={{ fontSize: '0.65rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>دقائق / Min</p>
+              <div style={{ fontSize: '1.1rem', color: '#c5a059' }}>:</div>
+              <div style={{ minWidth: '40px' }}>
+                <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.minutes}</span>
+                <p style={{ fontSize: '0.6rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>دقائق</p>
               </div>
-              <div style={{ fontSize: '1.2rem', color: '#c5a059' }}>:</div>
-              <div style={{ minWidth: '42px' }}>
-                <span style={{ fontSize: '1.5rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.seconds}</span>
-                <p style={{ fontSize: '0.65rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>ثواني / Sec</p>
+              <div style={{ fontSize: '1.1rem', color: '#c5a059' }}>:</div>
+              <div style={{ minWidth: '40px' }}>
+                <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.seconds}</span>
+                <p style={{ fontSize: '0.6rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>ثواني</p>
               </div>
             </div>
 
-            <div style={{ width: '40px', height: '1px', backgroundColor: '#c5a059', margin: '0.4rem 0' }}></div>
+            <div style={{ width: '35px', height: '1px', backgroundColor: '#c5a059', margin: '0.3rem 0' }}></div>
 
-            <h3 style={{ color: '#1a2b4c', fontSize: '0.95rem', margin: 0, fontWeight: '700' }}>
+            <h3 style={{ color: '#1a2b4c', fontSize: '0.9rem', margin: 0, fontWeight: '700' }}>
               👔 الزي المعتمد / Dress Code
             </h3>
-            <p style={{ color: '#c5a059', fontWeight: '700', fontSize: '0.85rem', margin: 0 }}>
-              بدلة رسمية / Black Tie & Formal Navy
+            <p style={{ color: '#c5a059', fontWeight: '700', fontSize: '0.8rem', margin: 0 }}>
+              بدلة رسمية / Black Tie & Navy
             </p>
+
+            <button 
+              onClick={() => scrollToNext(2)}
+              className="scroll-btn"
+              style={{
+                marginTop: '1rem',
+                background: 'transparent',
+                border: '1.5px solid #c5a059',
+                borderRadius: '20px',
+                padding: '0.3rem 1rem',
+                color: '#1a2b4c',
+                fontSize: '0.75rem',
+                fontWeight: '700',
+                cursor: 'pointer'
+              }}
+            >
+              التالي ↓ Next
+            </button>
           </div>
         </section>
 
-        {/* ================= القسم الرابع: المكان والتأكيد ================= */}
-        <section style={{
+        {/* ================= القسم الرابع: المكان ================= */}
+        <section ref={section4} style={{
           height: '100vh',
           width: '100%',
           maxWidth: '380px',
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           alignItems: 'center',
+          paddingTop: '38vh',
+          boxSizing: 'border-box',
           textAlign: 'center'
         }}>
           <div style={{
-            width: '82%',
+            width: '85%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '0.7rem',
-            textShadow: '0 1px 2px rgba(255,255,255,0.8)'
+            gap: '0.5rem',
+            textShadow: '0 1px 2px rgba(255,255,255,0.85)'
           }}>
-            <span style={{ fontSize: '1.8rem' }}>📍</span>
-            <h2 style={{ fontSize: '1.4rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
+            <span style={{ fontSize: '1.5rem' }}>📍</span>
+            <h2 style={{ fontSize: '1.3rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
               المكان والزمان
             </h2>
-            <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600', letterSpacing: '1px' }}>
+            <p style={{ fontSize: '0.7rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>
               LOCATION & TIME
             </p>
 
-            <p style={{ fontSize: '1rem', fontWeight: '800', color: '#2c436e', margin: '0.3rem 0 0 0' }}>
+            <p style={{ fontSize: '0.95rem', fontWeight: '800', color: '#2c436e', margin: '0.3rem 0 0 0' }}>
               Yildiz Hall - قاعة يلدز
             </p>
-            <p style={{ color: '#4b5563', fontSize: '0.82rem', margin: 0, fontWeight: '600' }}>
-              الأربعاء، 05 أغسطس 2026 - الساعة 7:00 مساءً
-            </p>
-            <p style={{ color: '#6b7280', fontSize: '0.75rem', margin: 0 }}>
-              Wednesday, Aug 5, 2026 at 7:00 PM
+            <p style={{ color: '#4b5563', fontSize: '0.8rem', margin: 0, fontWeight: '600' }}>
+              الأربعاء، 05 أغسطس 2026 - 7:00 مساءً
             </p>
 
             <a 
@@ -268,27 +374,25 @@ export default function Home() {
               target="_blank" 
               rel="noopener noreferrer"
               style={{
-                padding: '0.6rem 1.4rem',
+                padding: '0.5rem 1.2rem',
                 backgroundColor: '#1a2b4c',
                 color: '#ffffff',
                 borderRadius: '50px',
                 textDecoration: 'none',
-                fontSize: '0.8rem',
+                fontSize: '0.78rem',
                 fontWeight: '600',
-                marginTop: '0.5rem',
-                boxShadow: '0 4px 15px rgba(26, 43, 76, 0.3)'
+                marginTop: '0.6rem',
+                boxShadow: '0 4px 15px rgba(26, 43, 76, 0.25)',
+                textShadow: 'none' /* إزالة الظل عن النص داخل الزر */
               }}
             >
               موقع القاعة 🗺️ Google Maps
             </a>
 
-            <div style={{ width: '40px', height: '1px', backgroundColor: '#c5a059', margin: '0.5rem 0' }}></div>
+            <div style={{ width: '35px', height: '1px', backgroundColor: '#c5a059', margin: '0.5rem 0' }}></div>
 
-            <p style={{ fontSize: '0.85rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
+            <p style={{ fontSize: '0.82rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>
               أهلاً وسهلاً بكم، ننتظركم بشوق! ✨
-            </p>
-            <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>
-              We Look Forward to Celebrating With You!
             </p>
           </div>
         </section>
