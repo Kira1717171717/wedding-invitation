@@ -14,7 +14,6 @@ export default function Home() {
   const section4 = useRef(null);
   const sections = [section1, section2, section3, section4];
 
-  // دالة فتح الدعوة عند الضغط على الختم وتشغيل الأغنية
   const handleOpenInvitation = () => {
     setIsOpened(true);
     if (audioRef.current) {
@@ -22,7 +21,7 @@ export default function Home() {
     }
   };
 
-  // نظام النزول التلقائي (كل 3 ثواني بعد فتح الدعوة)
+  // نظام النزول التلقائي (كل 5 ثوانٍ بعد فتح الدعوة)
   useEffect(() => {
     if (!isOpened) return;
 
@@ -35,12 +34,11 @@ export default function Home() {
         });
         return nextIndex;
       });
-    }, 3000);
+    }, 5000); // تعديل المدة إلى 5 ثوانٍ
 
     return () => clearInterval(timer);
   }, [isOpened]);
 
-  // نظام العداد التنازلي
   useEffect(() => {
     const targetDate = new Date('2026-08-05T19:00:00').getTime();
     const interval = setInterval(() => {
@@ -91,18 +89,26 @@ export default function Home() {
           animation: bounce 2s infinite;
         }
 
-        /* نبض خفيف للختم عشان يلفت انتباه الضيف للضغط عليه */
-        @keyframes sealPulse {
-          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.6); }
-          50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(197, 160, 89, 0); }
-          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
+        @keyframes sealGlow {
+          0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.8); }
+          70% { box-shadow: 0 0 0 20px rgba(197, 160, 89, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
         }
-        .wax-seal-btn {
-          animation: sealPulse 2.5s infinite;
+        .wax-seal-container {
+          animation: sealGlow 2s infinite;
+          border-radius: 50%;
+        }
+
+        @keyframes tapMove {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(6px) scale(0.95); }
+        }
+        .tap-icon {
+          animation: tapMove 1.5s infinite ease-in-out;
         }
       `}</style>
 
-      {/* ================= واجهة المغلف التفاعلية (صورة المغلف بالكامل مع زر على الختم) ================= */}
+      {/* ================= واجهة المغلف ================= */}
       {!isOpened && (
         <div style={{
           position: 'fixed',
@@ -110,40 +116,68 @@ export default function Home() {
           left: 0,
           width: '100vw',
           height: '100vh',
+          backgroundColor: '#1a2b4c',
           backgroundImage: "url('/envelope.jpg')",
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover', /* بيملأ الشاشة تماماً بدون بياض وعلى قد الهاتف */
+          backgroundSize: 'contain',
           zIndex: 50,
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
           
-          {/* زر تفاعلي مطابق لمكان الختم تماماً في منتصف الصورة */}
           <button 
             onClick={handleOpenInvitation}
-            className="wax-seal-btn"
-            title="افتح الدعوة"
+            className="wax-seal-container"
+            title="اضغط لفتح الدعوة"
             style={{
               position: 'absolute',
-              width: '110px',  /* حجم دائرة الختم تقريباً */
-              height: '110px',
+              width: '105px',
+              height: '105px',
               borderRadius: '50%',
               backgroundColor: 'transparent',
-              border: 'none',
+              border: '2px solid rgba(197, 160, 89, 0.5)',
               cursor: 'pointer',
               outline: 'none',
-              // إذا احتجت لتحريك مكان الزر يميناً أو يساراً حسب مكان الختم بالصورة، بتعدل النسبة التالية:
               top: '52%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
-          />
+          >
+            <span className="tap-icon" style={{ fontSize: '1.8rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
+              👆
+            </span>
+          </button>
+
+          <div style={{
+            position: 'absolute',
+            top: '64%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            textAlign: 'center',
+            pointerEvents: 'none',
+            width: '100%'
+          }}>
+            <p style={{
+              color: '#c5a059',
+              fontSize: '0.85rem',
+              fontWeight: '700',
+              margin: 0,
+              textShadow: '0 2px 4px rgba(0,0,0,0.9)',
+              letterSpacing: '1px'
+            }}>
+              اضغط على الختم لفتح الدعوة 💌
+            </p>
+          </div>
         </div>
       )}
 
-      {/* ================= المحتوى الرئيسي للدعوة (يعمل بعد فتح المغلف) ================= */}
+      {/* ================= المحتوى الرئيسي للدعوة ================= */}
       <main style={{ 
         direction: 'rtl',
         height: '100vh',
@@ -194,53 +228,4 @@ export default function Home() {
           {/* القسم الثاني */}
           <section ref={section2} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
             <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
-              <span style={{ fontSize: '1.5rem' }}>💍</span>
-              <h2 style={{ fontSize: '1.3rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>دعوة عقد قران</h2>
-              <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>OFFICIAL INVITATION</p>
-              <div style={{ width: '40px', height: '1px', backgroundColor: '#c5a059', margin: '0.3rem 0' }}></div>
-              <p style={{ fontSize: '0.85rem', color: '#2c436e', lineHeight: '1.7', margin: 0, fontWeight: '600' }}>"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"</p>
-              <p style={{ fontSize: '0.75rem', color: '#4b5563', lineHeight: '1.6', margin: '0.3rem 0 0 0' }}>يسعدنا ويشرفنا دعوتكم لمشاركتنا أثمن لحظات العمر وأجملها في حفل زفافنا.</p>
-              <button onClick={() => scrollToNext(1)} className="scroll-btn" style={{ marginTop: '1rem', background: 'transparent', border: '1.5px solid #c5a059', borderRadius: '20px', padding: '0.3rem 1rem', color: '#1a2b4c', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>التالي ↓ Next</button>
-            </div>
-          </section>
-
-          {/* القسم الثالث */}
-          <section ref={section3} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
-            <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
-              <h2 style={{ fontSize: '1.2rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>العد التنازلي</h2>
-              <p style={{ fontSize: '0.7rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>COUNTDOWN</p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', margin: '0.5rem 0', direction: 'ltr' }}>
-                <div style={{ minWidth: '40px' }}><span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.days}</span><p style={{ fontSize: '0.6rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>أيام</p></div>
-                <div style={{ fontSize: '1.1rem', color: '#c5a059' }}>:</div>
-                <div style={{ minWidth: '40px' }}><span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.hours}</span><p style={{ fontSize: '0.6rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>ساعات</p></div>
-                <div style={{ fontSize: '1.1rem', color: '#c5a059' }}>:</div>
-                <div style={{ minWidth: '40px' }}><span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.minutes}</span><p style={{ fontSize: '0.6rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>دقائق</p></div>
-                <div style={{ fontSize: '1.1rem', color: '#c5a059' }}>:</div>
-                <div style={{ minWidth: '40px' }}><span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a2b4c' }}>{timeLeft.seconds}</span><p style={{ fontSize: '0.6rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>ثواني</p></div>
-              </div>
-              <div style={{ width: '35px', height: '1px', backgroundColor: '#c5a059', margin: '0.3rem 0' }}></div>
-              <h3 style={{ color: '#1a2b4c', fontSize: '0.9rem', margin: 0, fontWeight: '700' }}>👔 الزي المعتمد / Dress Code</h3>
-              <p style={{ color: '#c5a059', fontWeight: '700', fontSize: '0.8rem', margin: 0 }}>بدلة رسمية / Black Tie & Navy</p>
-              <button onClick={() => scrollToNext(2)} className="scroll-btn" style={{ marginTop: '1rem', background: 'transparent', border: '1.5px solid #c5a059', borderRadius: '20px', padding: '0.3rem 1rem', color: '#1a2b4c', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>التالي ↓ Next</button>
-            </div>
-          </section>
-
-          {/* القسم الرابع */}
-          <section ref={section4} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
-            <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
-              <span style={{ fontSize: '1.5rem' }}>📍</span>
-              <h2 style={{ fontSize: '1.3rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>المكان والزمان</h2>
-              <p style={{ fontSize: '0.7rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>LOCATION & TIME</p>
-              <p style={{ fontSize: '0.95rem', fontWeight: '800', color: '#2c436e', margin: '0.3rem 0 0 0' }}>Yildiz Hall - قاعة يلدز</p>
-              <p style={{ color: '#4b5563', fontSize: '0.8rem', margin: 0, fontWeight: '600' }}>الأربعاء، 05 أغسطس 2026 - 7:00 مساءً</p>
-              <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" style={{ padding: '0.5rem 1.2rem', backgroundColor: '#1a2b4c', color: '#ffffff', borderRadius: '50px', textDecoration: 'none', fontSize: '0.78rem', fontWeight: '600', marginTop: '0.6rem', boxShadow: '0 4px 15px rgba(26, 43, 76, 0.25)', textShadow: 'none' }}>موقع القاعة 🗺️ Google Maps</a>
-              <div style={{ width: '35px', height: '1px', backgroundColor: '#c5a059', margin: '0.5rem 0' }}></div>
-              <p style={{ fontSize: '0.82rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>أهلاً وسهلاً بكم، ننتظركم بشوق! ✨</p>
-            </div>
-          </section>
-
-        </div>
-      </main>
-    </>
-  );
-}
+              <span style={{
