@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function Home() {
+
   const weddingDate = new Date("2026-08-05T19:00:00");
 
   const [time, setTime] = useState({
@@ -13,113 +14,186 @@ export default function Home() {
     seconds: 0,
   });
 
+
   useEffect(() => {
+
     const timer = setInterval(() => {
+
       const now = new Date();
       const distance = weddingDate - now;
 
-      if (distance > 0) {
-        setTime({
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (distance / (1000 * 60 * 60)) % 24
-          ),
-          minutes: Math.floor(
-            (distance / (1000 * 60)) % 60
-          ),
-          seconds: Math.floor(
-            (distance / 1000) % 60
-          ),
-        });
-      }
+      setTime({
+        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((distance / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((distance / (1000 * 60)) % 60),
+        seconds: Math.floor((distance / 1000) % 60),
+      });
+
     }, 1000);
 
+
     return () => clearInterval(timer);
+
   }, []);
 
+
+
   return (
-    <main className="container">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="card"
-      >
 
-        <h1>
-          محمد & منار
-        </h1>
+    <main>
 
-        <h2>
-          Mohammad & Manar
-        </h2>
+      {/* Hero */}
 
-        <div className="date">
-          05 August 2026
-          <br />
-          الأربعاء | Wednesday
-        </div>
+      <section className="hero">
 
-        <div className="countdown">
+        <motion.div
+          initial={{opacity:0, y:40}}
+          animate={{opacity:1, y:0}}
+          transition={{duration:1}}
+        >
 
-          <div>
-            {time.days}
-            <span>Days</span>
-          </div>
-
-          <div>
-            {time.hours}
-            <span>Hours</span>
-          </div>
-
-          <div>
-            {time.minutes}
-            <span>Minutes</span>
-          </div>
-
-          <div>
-            {time.seconds}
-            <span>Seconds</span>
-          </div>
-
-        </div>
-
-
-        <section>
-          <h3>
-            📍 Yildiz Hall
-          </h3>
-
-          <p>
-            Black Tie - Weddings
+          <p className="small">
+            Together with our families
           </p>
-        </section>
 
 
-        <section>
-          <h3>
-            🎩 Dress Code
-          </h3>
+          <h1>
+            محمد & منار
+          </h1>
 
-          <p>
-            Black Tie
+
+          <h2>
+            Mohammad & Manar
+          </h2>
+
+
+          <div className="date">
+            05 August 2026
+            <br/>
+            الأربعاء | Wednesday
+          </div>
+
+
+          <div className="countdown">
+
+            <div>
+              {time.days}
+              <span>Days</span>
+            </div>
+
+            <div>
+              {time.hours}
+              <span>Hours</span>
+            </div>
+
+            <div>
+              {time.minutes}
+              <span>Minutes</span>
+            </div>
+
+            <div>
+              {time.seconds}
+              <span>Seconds</span>
+            </div>
+
+          </div>
+
+
+          <p className="scroll">
+            Scroll Down ↓
           </p>
-        </section>
+
+
+        </motion.div>
+
+      </section>
+
+
+
+      {/* Invitation */}
+
+      <section className="section">
+
+        <h3>
+          Our Special Day
+        </h3>
+
+        <p>
+          يسعدنا دعوتكم لمشاركتنا أجمل لحظات حياتنا
+        </p>
+
+        <p>
+          We would be honored to celebrate
+          this special day with you
+        </p>
+
+      </section>
+
+
+
+      {/* Details */}
+
+      <section className="section">
+
+        <h3>
+          Wedding Details
+        </h3>
+
+
+        <p>
+          📍 Yildiz Hall
+        </p>
+
+        <p>
+          Black Tie - Weddings
+        </p>
 
 
         <button>
           Open Location
         </button>
 
+      </section>
 
-        <p className="message">
-          تشرفنا مشاركتكم فرحتنا
-          <br />
-          We would be honored to celebrate with you
+
+
+      {/* Dress Code */}
+
+      <section className="section">
+
+        <h3>
+          🎩 Dress Code
+        </h3>
+
+        <p>
+          Black Tie
+        </p>
+
+        <p>
+          Elegant & Formal Attire
         </p>
 
 
-      </motion.div>
+      </section>
+
+
+
+      {/* Ending */}
+
+      <section className="section end">
+
+        <h1>
+          محمد & منار
+        </h1>
+
+        <p>
+          Thank you for being part of our story ❤️
+        </p>
+
+      </section>
+
+
     </main>
+
   );
 }
