@@ -194,6 +194,24 @@ button:hover {
   .section p {
     font-size: 18px;
   }
+.location-btn {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 15px 45px;
+  border-radius: 50px;
+  border: 1px solid #d4af37;
+  background: #d4af37;
+  color: #07152f;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
 
+.location-btn:hover {
+  background: transparent;
+  color: #d4af37;
+  transform: translateY(-3px);
+}
 
 }
