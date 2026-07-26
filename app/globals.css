@@ -1,0 +1,115 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #07152f;
+  color: #f5d77a;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background:
+    radial-gradient(circle at top, #162d55, #07152f);
+}
+
+.card {
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  padding: 40px 25px;
+  border: 1px solid #c9a646;
+  border-radius: 25px;
+  background: rgba(5, 15, 35, 0.85);
+  box-shadow: 0 0 40px rgba(201,166,70,0.25);
+}
+
+h1 {
+  font-size: 48px;
+  margin: 0;
+  font-family: serif;
+}
+
+h2 {
+  font-size: 28px;
+  margin-top: 10px;
+  color: #fff;
+}
+
+.date {
+  margin: 30px 0;
+  font-size: 22px;
+  line-height: 1.6;
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 30px 0;
+  direction: ltr;
+}
+
+.countdown div {
+  background: #c9a646;
+  color: #07152f;
+  padding: 15px 10px;
+  border-radius: 12px;
+  min-width: 70px;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.countdown span {
+  display: block;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+section {
+  margin: 25px 0;
+}
+
+section h3 {
+  font-size: 22px;
+}
+
+section p {
+  color: white;
+}
+
+button {
+  margin-top: 20px;
+  padding: 14px 35px;
+  border-radius: 30px;
+  border: none;
+  background: #c9a646;
+  color: #07152f;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.message {
+  margin-top: 30px;
+  line-height: 1.8;
+  color: white;
+}
+
+@media(max-width:600px){
+
+  h1 {
+    font-size: 38px;
+  }
+
+  .countdown div {
+    min-width: 60px;
+    font-size: 20px;
+  }
+
+}
