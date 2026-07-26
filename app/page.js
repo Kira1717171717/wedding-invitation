@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 export default function Home() {
-  const [isOpened, setIsOpened] = useState(false); // حالة فتح المغلف
+  const [isOpened, setIsOpened] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -14,7 +14,7 @@ export default function Home() {
   const section4 = useRef(null);
   const sections = [section1, section2, section3, section4];
 
-  // دالة فتح الدعوة وتشغيل الصوت
+  // دالة فتح الدعوة عند الضغط على الختم وتشغيل الأغنية
   const handleOpenInvitation = () => {
     setIsOpened(true);
     if (audioRef.current) {
@@ -22,9 +22,9 @@ export default function Home() {
     }
   };
 
-  // نظام النزول التلقائي (يعمل فقط بعد فتح الدعوة)
+  // نظام النزول التلقائي (كل 3 ثواني بعد فتح الدعوة)
   useEffect(() => {
-    if (!isOpened) return; // لا تبدأ النزول التلقائي إلا إذا انفتحت الدعوة
+    if (!isOpened) return;
 
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => {
@@ -69,10 +69,8 @@ export default function Home() {
 
   return (
     <>
-      {/* ملف الصوت */}
       <audio ref={audioRef} src="/song.mp3" loop />
 
-      {/* استدعاء الخط الكوفي وتأثير الأزرار */}
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap');
         
@@ -80,7 +78,8 @@ export default function Home() {
           font-family: 'Noto Kufi Arabic', sans-serif;
           margin: 0;
           padding: 0;
-          overflow: ${isOpened ? 'auto' : 'hidden'}; /* منع السكرول قبل فتح الدعوة */
+          overflow: ${isOpened ? 'auto' : 'hidden'};
+          background-color: #1a2b4c;
         }
 
         @keyframes bounce {
@@ -92,17 +91,18 @@ export default function Home() {
           animation: bounce 2s infinite;
         }
 
-        @keyframes pulseGold {
-          0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4); }
-          70% { box-shadow: 0 0 0 15px rgba(197, 160, 89, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
+        /* نبض خفيف للختم عشان يلفت انتباه الضيف للضغط عليه */
+        @keyframes sealPulse {
+          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.6); }
+          50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(197, 160, 89, 0); }
+          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
         }
-        .open-btn {
-          animation: pulseGold 2s infinite;
+        .wax-seal-btn {
+          animation: sealPulse 2.5s infinite;
         }
       `}</style>
 
-      {/* ================= واجهة المغلف الكحلي (تظهر قبل الفتح) ================= */}
+      {/* ================= واجهة المغلف التفاعلية (صورة المغلف بالكامل مع زر على الختم) ================= */}
       {!isOpened && (
         <div style={{
           position: 'fixed',
@@ -110,44 +110,40 @@ export default function Home() {
           left: 0,
           width: '100vw',
           height: '100vh',
-          backgroundColor: '#1a2b4c', /* كحلي فاخر */
-          backgroundImage: 'radial-gradient(circle, #2c436e 0%, #1a2b4c 100%)', /* تدرج لوني يعطي عمق */
+          backgroundImage: "url('/envelope.jpg')",
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover', /* بيملأ الشاشة تماماً بدون بياض وعلى قد الهاتف */
           zIndex: 50,
           display: 'flex',
-          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          direction: 'rtl',
-          textAlign: 'center'
         }}>
-          <p style={{ color: '#c5a059', fontSize: '1rem', letterSpacing: '2px', marginBottom: '1rem' }}>
-            WEDDING INVITATION
-          </p>
-          <h1 style={{ color: '#ffffff', fontSize: '2.5rem', margin: '0 0 2rem 0' }}>
-            محمد & منار
-          </h1>
           
+          {/* زر تفاعلي مطابق لمكان الختم تماماً في منتصف الصورة */}
           <button 
             onClick={handleOpenInvitation}
-            className="open-btn"
+            className="wax-seal-btn"
+            title="افتح الدعوة"
             style={{
+              position: 'absolute',
+              width: '110px',  /* حجم دائرة الختم تقريباً */
+              height: '110px',
+              borderRadius: '50%',
               backgroundColor: 'transparent',
-              border: '2px solid #c5a059',
-              color: '#c5a059',
-              padding: '0.8rem 2.5rem',
-              fontSize: '1.2rem',
-              fontWeight: '700',
-              borderRadius: '50px',
+              border: 'none',
               cursor: 'pointer',
-              transition: 'all 0.3s ease',
+              outline: 'none',
+              // إذا احتجت لتحريك مكان الزر يميناً أو يساراً حسب مكان الختم بالصورة، بتعدل النسبة التالية:
+              top: '52%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
             }}
-          >
-            افتح الدعوة 💌
-          </button>
+          />
         </div>
       )}
 
-      {/* ================= المحتوى الرئيسي للدعوة (يظهر بعد الفتح) ================= */}
+      {/* ================= المحتوى الرئيسي للدعوة (يعمل بعد فتح المغلف) ================= */}
       <main style={{ 
         direction: 'rtl',
         height: '100vh',
@@ -156,10 +152,9 @@ export default function Home() {
         scrollBehavior: 'smooth',
         position: 'relative',
         backgroundColor: '#f8f4ee',
-        display: isOpened ? 'block' : 'none' /* إخفاء المحتوى قبل الفتح */
+        display: isOpened ? 'block' : 'none'
       }}>
         
-        {/* خلفية الصورة الثابتة */}
         <div style={{
           position: 'fixed',
           top: 0,
@@ -174,7 +169,6 @@ export default function Home() {
           pointerEvents: 'none'
         }} />
 
-        {/* الحاوية الرئيسية للمحتوى (فوق الصورة) */}
         <div style={{
           position: 'relative',
           zIndex: 2,
@@ -183,29 +177,9 @@ export default function Home() {
           alignItems: 'center'
         }}>
 
-          {/* القسم الأول: غلاف الدعوة */}
-          <section ref={section1} style={{
-            height: '100vh',
-            width: '100%',
-            maxWidth: '380px',
-            scrollSnapAlign: 'start',
-            scrollSnapStop: 'always',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            paddingTop: '38vh',
-            boxSizing: 'border-box',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              width: '85%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '0.3rem',
-              textShadow: '0 1px 2px rgba(255,255,255,0.85)'
-            }}>
+          {/* القسم الأول */}
+          <section ref={section1} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
+            <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
               <p style={{ fontSize: '0.75rem', letterSpacing: '2px', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>WEDDING INVITATION</p>
               <p style={{ fontSize: '0.85rem', color: '#c5a059', margin: 0, fontWeight: '700' }}>دعـوة زفــاف</p>
               <h1 style={{ fontSize: '2.1rem', fontWeight: '800', color: '#1a2b4c', margin: '0.2rem 0' }}>محمد & منار</h1>
@@ -217,29 +191,9 @@ export default function Home() {
             </div>
           </section>
 
-          {/* القسم الثاني: نص الدعوة */}
-          <section ref={section2} style={{
-            height: '100vh',
-            width: '100%',
-            maxWidth: '380px',
-            scrollSnapAlign: 'start',
-            scrollSnapStop: 'always',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            paddingTop: '38vh',
-            boxSizing: 'border-box',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              width: '85%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '0.5rem',
-              textShadow: '0 1px 2px rgba(255,255,255,0.85)'
-            }}>
+          {/* القسم الثاني */}
+          <section ref={section2} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
+            <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
               <span style={{ fontSize: '1.5rem' }}>💍</span>
               <h2 style={{ fontSize: '1.3rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>دعوة عقد قران</h2>
               <p style={{ fontSize: '0.75rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>OFFICIAL INVITATION</p>
@@ -250,29 +204,9 @@ export default function Home() {
             </div>
           </section>
 
-          {/* القسم الثالث: العداد واللباس */}
-          <section ref={section3} style={{
-            height: '100vh',
-            width: '100%',
-            maxWidth: '380px',
-            scrollSnapAlign: 'start',
-            scrollSnapStop: 'always',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            paddingTop: '38vh',
-            boxSizing: 'border-box',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              width: '85%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '0.5rem',
-              textShadow: '0 1px 2px rgba(255,255,255,0.85)'
-            }}>
+          {/* القسم الثالث */}
+          <section ref={section3} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
+            <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
               <h2 style={{ fontSize: '1.2rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>العد التنازلي</h2>
               <p style={{ fontSize: '0.7rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>COUNTDOWN</p>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', margin: '0.5rem 0', direction: 'ltr' }}>
@@ -291,29 +225,9 @@ export default function Home() {
             </div>
           </section>
 
-          {/* القسم الرابع: المكان */}
-          <section ref={section4} style={{
-            height: '100vh',
-            width: '100%',
-            maxWidth: '380px',
-            scrollSnapAlign: 'start',
-            scrollSnapStop: 'always',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            paddingTop: '38vh',
-            boxSizing: 'border-box',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              width: '85%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '0.5rem',
-              textShadow: '0 1px 2px rgba(255,255,255,0.85)'
-            }}>
+          {/* القسم الرابع */}
+          <section ref={section4} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
+            <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
               <span style={{ fontSize: '1.5rem' }}>📍</span>
               <h2 style={{ fontSize: '1.3rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>المكان والزمان</h2>
               <p style={{ fontSize: '0.7rem', color: '#c5a059', margin: 0, fontWeight: '600' }}>LOCATION & TIME</p>
