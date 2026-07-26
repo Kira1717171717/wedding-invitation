@@ -34,8 +34,16 @@ export default function Home() {
 
   return (
     <main>
-      {/* القسم الأول - الهيرو وبطاقة الدعوة */}
-      <section className="hero-container">
+      {/* القسم الأول - الهيرو وبطاقة الدعوة مع إدراج الصورة مباشرة */}
+      <section 
+        className="hero-container"
+        style={{
+          backgroundImage: "url('/wedding-bg.jpg')",
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover'
+        }}
+      >
         <div className="hero-content">
           <h1 className="names-arabic">محمد & منار</h1>
           <p className="names-english">Mohammad & Manar</p>
