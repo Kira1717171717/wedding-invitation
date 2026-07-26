@@ -8,7 +8,7 @@ const cinzel = Cinzel({
 });
 
 
-const arabicFont = Noto_Naskh_Arabic({
+const arabic = Noto_Naskh_Arabic({
   subsets: ["arabic"],
   weight: ["400", "500", "700"],
 });
@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
 
     <html lang="ar">
 
-      <body className={`${cinzel.className} ${arabicFont.className}`}>
+      <body className={`${cinzel.className} ${arabic.className}`}>
 
         {children}
 
@@ -35,5 +35,4 @@ export default function RootLayout({ children }) {
     </html>
 
   );
-
 }
