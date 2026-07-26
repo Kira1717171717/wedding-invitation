@@ -22,12 +22,16 @@ export default function Home() {
       const now = new Date();
       const distance = weddingDate - now;
 
-      setTime({
-        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((distance / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((distance / (1000 * 60)) % 60),
-        seconds: Math.floor((distance / 1000) % 60),
-      });
+      if (distance > 0) {
+
+        setTime({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((distance / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((distance / (1000 * 60)) % 60),
+          seconds: Math.floor((distance / 1000) % 60),
+        });
+
+      }
 
     }, 1000);
 
@@ -42,14 +46,15 @@ export default function Home() {
 
     <main>
 
-      {/* Hero */}
+
+      {/* First Screen */}
 
       <section className="hero">
 
         <motion.div
-          initial={{opacity:0, y:40}}
-          animate={{opacity:1, y:0}}
-          transition={{duration:1}}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
         >
 
           <p className="small">
@@ -69,7 +74,7 @@ export default function Home() {
 
           <div className="date">
             05 August 2026
-            <br/>
+            <br />
             الأربعاء | Wednesday
           </div>
 
@@ -112,7 +117,13 @@ export default function Home() {
 
       {/* Invitation */}
 
-      <section className="section">
+      <motion.section
+        className="section"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
 
         <h3>
           Our Special Day
@@ -127,13 +138,20 @@ export default function Home() {
           this special day with you
         </p>
 
-      </section>
+      </motion.section>
 
 
 
-      {/* Details */}
 
-      <section className="section">
+      {/* Wedding Details */}
+
+      <motion.section
+        className="section"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
 
         <h3>
           Wedding Details
@@ -149,55 +167,75 @@ export default function Home() {
         </p>
 
 
-<a 
-  href="https://www.google.com/maps/dir//Yildiz+Hall+-+Black+Tie-+Weddings,+QWM6%2BXQ,+Amman/@31.9614981,35.9068476,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x151ca9dbee45f169:0x618aa9a93506d572!2m2!1d35.9119597!2d31.7848898?hl=en-JO&entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D"
-  target="_blank"
-  className="location-btn"
->
-  Open Location
-</a>
+        <a
+          href="ضع_رابط_الموقع_هنا"
+          target="_blank"
+          className="location-btn"
+        >
+          Open Location
+        </a>
 
-      </section>
+
+      </motion.section>
+
 
 
 
       {/* Dress Code */}
 
-      <section className="section">
+      <motion.section
+        className="section"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
 
         <h3>
           🎩 Dress Code
         </h3>
 
+
         <p>
           Black Tie
         </p>
+
 
         <p>
           Elegant & Formal Attire
         </p>
 
 
-      </section>
+      </motion.section>
+
 
 
 
       {/* Ending */}
 
-      <section className="section end">
+      <motion.section
+        className="section end"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: true }}
+      >
 
         <h1>
           محمد & منار
         </h1>
 
+
         <p>
           Thank you for being part of our story ❤️
         </p>
 
-      </section>
+
+      </motion.section>
 
 
     </main>
 
   );
+
 }
