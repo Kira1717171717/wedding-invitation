@@ -3,41 +3,53 @@
 import { useState } from "react";
 
 export default function Home() {
-  const [opening, setOpening] = useState(false);
   const [opened, setOpened] = useState(false);
-
-  const openEnvelope = () => {
-    setOpening(true);
-
-    setTimeout(() => {
-      setOpened(true);
-    }, 900);
-  };
 
   return (
     <main className="min-h-screen bg-[#07182f] flex items-center justify-center overflow-hidden">
 
-      {!opened && (
+      {!opened ? (
         <img
           src="/envelope.jpg"
-          alt="Envelope"
-          onClick={openEnvelope}
+          alt="Wedding Envelope"
+          onClick={() => setOpened(true)}
           className="max-w-full max-h-screen object-contain cursor-pointer"
           style={{
-            transition: "transform 0.9s ease, opacity 0.9s ease",
-            transform: opening ? "scale(1.05)" : "scale(1)",
-            opacity: opening ? 0 : 1,
+            animation: "fadeIn 0.8s ease",
           }}
         />
-      )}
-
-      {opened && (
+      ) : (
         <img
           src="/wedding-bg.jpg"
           alt="Wedding Invitation"
           className="max-w-full max-h-screen object-contain"
+          style={{
+            animation: "showCard 0.8s ease",
+          }}
         />
       )}
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes showCard {
+          from {
+            opacity: 0;
+            transform: scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
 
     </main>
   );
