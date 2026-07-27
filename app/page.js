@@ -19,7 +19,7 @@ export default function Home() {
     }
   };
 
-  // التمرير التلقائي كل 4 ثوانٍ بعد فتح المغلف
+  // التمرير التلقائي كل 4 ثوانٍ
   useEffect(() => {
     if (!isOpened) return;
 
@@ -30,21 +30,19 @@ export default function Home() {
         const maxScroll = mainRef.current.scrollHeight - pageHeight;
 
         if (currentScroll >= maxScroll - 10) {
-          // الوصول للنهاية -> العودة للبداية
           mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
-          // الانتقال للصفحة التالية
           mainRef.current.scrollTo({ top: currentScroll + pageHeight, behavior: 'smooth' });
         }
       }
-    }, 4000); // 4 ثوانٍ
+    }, 4000);
 
     return () => clearInterval(autoScrollInterval);
   }, [isOpened]);
 
-  // حساب العد التنازلي
+  // العد التنازلي
   useEffect(() => {
-    const targetDate = new Date('2026-08-05T19:00:00').getTime();
+    const targetDate = new Date('2026-08-05T19:30:00').getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const diff = targetDate - now;
@@ -79,11 +77,11 @@ export default function Home() {
           height: 100%;
           overflow: hidden;
           font-family: 'Noto Kufi Arabic', sans-serif;
-          background-color: #0b131f;
+          background-color: #0a1128; /* Navy Blue */
           color: #ffffff;
         }
 
-        /* صورة البطاقة الثابتة ملء الشاشة بدون أي صناديق */
+        /* خلفية الدعوة الكحلية الثابتة */
         .fixed-wedding-bg {
           position: fixed;
           top: 0;
@@ -97,7 +95,18 @@ export default function Home() {
           z-index: 1;
         }
 
-        /* تحريك أرقام العد التنازلي */
+        /* طبقة عزل كحلية خفيفة جداً لموازنة الألوان وضمان وضوح النص */
+        .navy-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(10, 17, 40, 0.25);
+          z-index: 2;
+          pointer-events: none;
+        }
+
         @keyframes pulseNum {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.05); color: #d4af37; }
@@ -106,7 +115,6 @@ export default function Home() {
           animation: pulseNum 2s infinite ease-in-out;
         }
 
-        /* حركة خفيفة للسهم */
         @keyframes floatDown {
           0%, 100% { transform: translateY(0); opacity: 0.6; }
           50% { transform: translateY(8px); opacity: 1; }
@@ -115,23 +123,23 @@ export default function Home() {
           animation: floatDown 2s infinite ease-in-out;
         }
 
-        /* كلاس النص المباشر بدون خلفية */
-        .direct-text-container {
-          width: 85%;
-          max-width: 400px;
+        /* حاوية النص بين الأعمدة وتحت الثريا بالزبط */
+        .center-column-container {
+          width: 75%;
+          max-width: 380px;
           text-align: center;
           box-sizing: border-box;
-          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5);
+          margin-top: 5vh; /* لإزاحة النص ليكون تحت الثريا تماماً */
+          text-shadow: 0 2px 8px rgba(10, 17, 40, 0.9), 0 0 15px rgba(0, 0, 0, 0.7);
         }
 
-        /* تخصيص مدخلات الـ RSVP بدون خلفية معتمة */
         .rsvp-input {
           width: 100%;
           padding: 0.75rem;
           margin-bottom: 0.8rem;
           border-radius: 8px;
           border: 1.5px solid rgba(212, 175, 55, 0.8);
-          background: rgba(11, 19, 31, 0.6);
+          background: rgba(10, 17, 40, 0.75);
           color: #fff;
           font-family: inherit;
           font-size: 0.85rem;
@@ -141,10 +149,11 @@ export default function Home() {
         }
       `}</style>
 
-      {/* الصورة الثابتة بالخلفية */}
+      {/* الصورة والطبقة الكحلية */}
       <div className="fixed-wedding-bg" />
+      <div className="navy-overlay" />
 
-      {/* ================= الصفحة الأولى: المغلف ✉️ ================= */}
+      {/* ================= المغلف ✉️ ================= */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -195,7 +204,7 @@ export default function Home() {
         </button>
       </div>
 
-      {/* ================= النصوص التي تنزل تلقائياً فوق صورة الدعوة ================= */}
+      {/* ================= المحتوى المتتابع ================= */}
       <main 
         ref={mainRef}
         style={{
@@ -210,39 +219,52 @@ export default function Home() {
         }}
       >
 
-        {/* الصفحة 1: الأسماء والتاريخ */}
+        {/* الصفحة 1: المقدمة */}
         <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="direct-text-container">
-            <p style={{ fontSize: '0.85rem', color: '#d4af37', letterSpacing: '4px', margin: 0, fontFamily: 'Cinzel', fontWeight: '700' }}>WEDDING INVITATION</p>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#ffffff', margin: '0.8rem 0 0.2rem 0' }}>محمد & منار</h1>
-            <p style={{ fontSize: '1.2rem', color: '#d4af37', fontFamily: 'Cinzel', margin: 0, fontWeight: '700' }}>Mohammad & Manar</p>
-            <div style={{ width: '50px', height: '2px', backgroundColor: '#d4af37', margin: '1.2rem auto' }}></div>
-            <p style={{ fontSize: '1rem', color: '#ffffff', fontWeight: '700', margin: 0 }}>الأربعاء ، 05 أغسطس 2026</p>
-            <p style={{ fontSize: '0.85rem', color: '#d4af37', fontFamily: 'Cinzel', margin: '0.3rem 0 0 0', fontWeight: '600' }}>Wednesday, August 5, 2026</p>
-          </div>
-        </section>
-
-        {/* الصفحة 2: نص الدعوة */}
-        <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="direct-text-container">
+          <div className="center-column-container">
             <span style={{ fontSize: '1.8rem' }}>✨</span>
-            <p style={{ fontSize: '1rem', color: '#ffffff', lineHeight: '1.9', fontWeight: '700', margin: '0.8rem 0 0 0' }}>
-              بكل حب وفرح،<br />
-              نتشرف بدعوتكم لمشاركتنا أجمل يوم في حياتنا،<br />
-              فوجودكم هو أجمل هدية لنا.
+            <p style={{ fontSize: '1.15rem', color: '#ffffff', lineHeight: '2', fontWeight: '700', margin: '1rem 0' }}>
+              "اخترنا أن نبدأ فصلنا القادم بين من كان لهم مكانٌ في حكايتنا..."
             </p>
-            <div style={{ width: '40px', height: '1px', backgroundColor: '#d4af37', margin: '1.2rem auto' }}></div>
-            <p style={{ fontSize: '0.85rem', color: '#d4af37', fontFamily: 'Cinzel', lineHeight: '1.8', margin: 0, fontWeight: '600' }}>
-              With love and joy,<br />
-              We warmly invite you to celebrate our wedding day.<br />
-              Your presence will make our celebration truly special.
+            <div style={{ width: '40px', height: '2px', backgroundColor: '#d4af37', margin: '1rem auto' }}></div>
+          </div>
+        </section>
+
+        {/* الصفحة 2: الدعوة الرسمية والأسماء */}
+        <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div className="center-column-container">
+            <p style={{ fontSize: '0.9rem', color: '#d4af37', letterSpacing: '2px', margin: '0 0 0.5rem 0', fontWeight: '700' }}>بكل الحب يدعوكم</p>
+            
+            <h3 style={{ fontSize: '1.1rem', color: '#ffffff', margin: '0.3rem 0', fontWeight: '700' }}>السيد يزن الخطبا</h3>
+            <p style={{ fontSize: '0.85rem', color: '#d4af37', margin: '0' }}>و</p>
+            <h3 style={{ fontSize: '1.1rem', color: '#ffffff', margin: '0.3rem 0 1rem 0', fontWeight: '700' }}>السيد خيري نصرالله</h3>
+
+            <p style={{ fontSize: '0.9rem', color: '#e5e7eb', margin: '0.5rem 0' }}>لمشاركتنا الاحتفال بزفاف</p>
+            <p style={{ fontSize: '0.85rem', color: '#d4af37', margin: '0 0 0.5rem 0' }}>ابنهم وشقيقهم</p>
+
+            <h1 style={{ fontSize: '2.4rem', fontWeight: '800', color: '#ffffff', margin: '0.5rem 0' }}>محمد & منار</h1>
+            <p style={{ fontSize: '1.1rem', color: '#d4af37', fontFamily: 'Cinzel', margin: 0, fontWeight: '700' }}>Mohammad & Manar</p>
+          </div>
+        </section>
+
+        {/* الصفحة 3: الموعد والزفة */}
+        <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div className="center-column-container">
+            <p style={{ fontSize: '0.85rem', color: '#d4af37', letterSpacing: '3px', margin: 0, fontFamily: 'Cinzel', fontWeight: '700' }}>DATE & TIME</p>
+            <h2 style={{ fontSize: '1.3rem', color: '#ffffff', fontWeight: '800', margin: '0.8rem 0 0.3rem 0' }}>الأربعاء ، 05 أغسطس 2026</h2>
+            <p style={{ fontSize: '0.85rem', color: '#d4af37', fontFamily: 'Cinzel', margin: '0 0 1.2rem 0', fontWeight: '600' }}>Wednesday, August 5, 2026</p>
+            
+            <div style={{ width: '40px', height: '1px', backgroundColor: '#d4af37', margin: '0.8rem auto' }}></div>
+            
+            <p style={{ fontSize: '1rem', color: '#ffffff', fontWeight: '700', margin: '0.5rem 0' }}>
+              🥁 تبدأ الزفة في تمام الساعة <span style={{ color: '#d4af37' }}>7:30</span> مساءً
             </p>
           </div>
         </section>
 
-        {/* الصفحة 3: العد التنازلي */}
+        {/* الصفحة 4: العد التنازلي */}
         <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="direct-text-container">
+          <div className="center-column-container">
             <p style={{ fontSize: '0.9rem', color: '#d4af37', letterSpacing: '3px', fontFamily: 'Cinzel', margin: '0 0 1.2rem 0', fontWeight: '700' }}>COUNTDOWN</p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', direction: 'ltr' }}>
               <div>
@@ -268,9 +290,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* الصفحة 4: المكان وخرائط جوجل */}
+        {/* الصفحة 5: المكان وخرائط جوجل */}
         <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="direct-text-container">
+          <div className="center-column-container">
             <span style={{ fontSize: '1.8rem' }}>📍</span>
             <p style={{ fontSize: '0.85rem', color: '#d4af37', letterSpacing: '3px', fontFamily: 'Cinzel', margin: '0.4rem 0 0 0', fontWeight: '700' }}>VENUE</p>
             <h2 style={{ fontSize: '1.6rem', fontWeight: '800', margin: '0.4rem 0 0.2rem 0' }}>Yildiz Hall</h2>
@@ -282,7 +304,7 @@ export default function Home() {
               rel="noopener noreferrer"
               style={{
                 padding: '0.7rem 1.5rem',
-                backgroundColor: 'rgba(11, 19, 31, 0.7)',
+                backgroundColor: 'rgba(10, 17, 40, 0.85)',
                 border: '1.5px solid #d4af37',
                 color: '#d4af37',
                 borderRadius: '30px',
@@ -299,11 +321,15 @@ export default function Home() {
           </div>
         </section>
 
-        {/* الصفحة 5: تأكيد الحضور RSVP */}
+        {/* الصفحة 6: تأكيد الحضور والملاحظات */}
         <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="direct-text-container">
-            <h2 style={{ fontSize: '1.5rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0 0 1rem 0', fontWeight: '800' }}>RSVP</h2>
+          <div className="center-column-container">
+            <h2 style={{ fontSize: '1.4rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0 0 0.5rem 0', fontWeight: '800' }}>RSVP</h2>
             
+            <p style={{ fontSize: '0.75rem', color: '#e5e7eb', margin: '0 0 1rem 0', lineHeight: '1.5' }}>
+              نظرًا لمحدودية المقاعد، نرجو التكرم بتأكيد حضوركم مسبقًا.
+            </p>
+
             {!submitted ? (
               <form onSubmit={handleRsvpSubmit} style={{ width: '100%' }}>
                 <input 
@@ -320,9 +346,9 @@ export default function Home() {
                   value={rsvpData.guests}
                   onChange={(e) => setRsvpData({ ...rsvpData, guests: e.target.value })}
                 >
-                  <option value="1" style={{ background: '#0b131f' }}>1 Guest</option>
-                  <option value="2" style={{ background: '#0b131f' }}>2 Guests</option>
-                  <option value="3" style={{ background: '#0b131f' }}>3 Guests</option>
+                  <option value="1" style={{ background: '#0a1128' }}>1 Guest</option>
+                  <option value="2" style={{ background: '#0a1128' }}>2 Guests</option>
+                  <option value="3" style={{ background: '#0a1128' }}>3 Guests</option>
                 </select>
 
                 <select 
@@ -330,8 +356,8 @@ export default function Home() {
                   value={rsvpData.status}
                   onChange={(e) => setRsvpData({ ...rsvpData, status: e.target.value })}
                 >
-                  <option value="yes" style={{ background: '#0b131f' }}>Will Attend ✨</option>
-                  <option value="no" style={{ background: '#0b131f' }}>Apologize 🤍</option>
+                  <option value="yes" style={{ background: '#0a1128' }}>Will Attend ✨</option>
+                  <option value="no" style={{ background: '#0a1128' }}>Apologize 🤍</option>
                 </select>
 
                 <button 
@@ -340,13 +366,13 @@ export default function Home() {
                     width: '100%',
                     padding: '0.75rem',
                     backgroundColor: '#d4af37',
-                    color: '#0b131f',
+                    color: '#0a1128',
                     border: 'none',
                     borderRadius: '8px',
                     fontWeight: '800',
                     fontSize: '0.85rem',
                     cursor: 'pointer',
-                    marginTop: '0.4rem',
+                    marginTop: '0.2rem',
                     boxShadow: '0 4px 15px rgba(212, 175, 55, 0.4)'
                   }}
                 >
@@ -354,23 +380,28 @@ export default function Home() {
                 </button>
               </form>
             ) : (
-              <div style={{ padding: '1rem 0' }}>
-                <span style={{ fontSize: '2rem' }}>🎉</span>
-                <p style={{ fontSize: '1rem', color: '#d4af37', fontWeight: '800', marginTop: '0.5rem' }}>شكراً لك! تم تسجيل حضورك بنجاح.</p>
+              <div style={{ padding: '0.5rem 0' }}>
+                <span style={{ fontSize: '1.8rem' }}>🎉</span>
+                <p style={{ fontSize: '0.9rem', color: '#d4af37', fontWeight: '800', marginTop: '0.3rem' }}>شكراً لك! تم تسجيل حضورك بنجاح.</p>
               </div>
             )}
           </div>
         </section>
 
-        {/* الصفحة 6: Thank You */}
+        {/* الصفحة 7: ملاحظة الأطفال والخاتمة */}
         <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="direct-text-container">
-            <h2 style={{ fontSize: '2rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0 0 0.5rem 0', fontWeight: '800' }}>Thank You</h2>
-            <p style={{ fontSize: '1rem', color: '#ffffff', lineHeight: '1.6', fontWeight: '700', margin: 0 }}>
+          <div className="center-column-container">
+            <span style={{ fontSize: '1.5rem' }}>🌙</span>
+            <p style={{ fontSize: '0.8rem', color: '#ffffff', lineHeight: '1.8', fontWeight: '600', margin: '0.8rem 0' }}>
+              حرصًا على راحة الجميع وأجواء الحفل، نعتذر عن استقبال الأطفال، مع تمنياتنا لهم بليلة هادئة وأحلام سعيدة.
+            </p>
+            
+            <div style={{ width: '40px', height: '1px', backgroundColor: '#d4af37', margin: '1rem auto' }}></div>
+
+            <h2 style={{ fontSize: '1.6rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0.5rem 0 0.2rem 0', fontWeight: '800' }}>Thank You</h2>
+            <p style={{ fontSize: '0.85rem', color: '#ffffff', fontWeight: '700', margin: 0 }}>
               We Can't Wait To Celebrate With You
             </p>
-            <div style={{ width: '50px', height: '2px', backgroundColor: '#d4af37', margin: '1.2rem auto' }}></div>
-            <p style={{ fontSize: '0.9rem', color: '#d4af37', fontFamily: 'Cinzel', margin: 0, fontWeight: '700' }}>05 August 2026</p>
           </div>
         </section>
 
