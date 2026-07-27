@@ -24,47 +24,35 @@ export default function Home() {
           onClick={openEnvelope}
           className="w-full h-screen object-contain cursor-pointer"
           style={{
-            transition: "all 0.9s ease",
-            transform: opening ? "scale(1.08)" : "scale(1)",
+            transition: "0.9s ease",
+            transform: opening ? "scale(1.1)" : "scale(1)",
             opacity: opening ? 0 : 1,
           }}
         />
       )}
 
       {opened && (
-        <div className="relative w-full h-screen flex items-center justify-center">
-
+        <div
+          className="w-full h-screen flex items-center justify-center"
+          style={{
+            animation: "fadeIn 1s ease",
+          }}
+        >
           <img
             src="/wedding-bg.jpg"
             alt="Wedding Invitation"
-            className="w-full h-screen object-contain"
-            style={{
-              animation: "cardOpen 1s ease",
-            }}
+            className="max-w-full max-h-full object-contain"
           />
-
-          <button
-            className="absolute bottom-20 px-10 py-4 rounded-full bg-[#c9a45c] text-[#07182f] font-semibold tracking-wide shadow-lg"
-          >
-            Open Invitation
-          </button>
-
         </div>
       )}
 
       <style jsx>{`
-        @keyframes cardOpen {
-          0% {
+        @keyframes fadeIn {
+          from {
             opacity: 0;
-            transform: scale(0.6);
+            transform: scale(0.85);
           }
-
-          60% {
-            opacity: 1;
-            transform: scale(1.05);
-          }
-
-          100% {
+          to {
             opacity: 1;
             transform: scale(1);
           }
