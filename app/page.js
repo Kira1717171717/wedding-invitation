@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
-  const [isFading, setIsFading] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -15,18 +14,13 @@ export default function Home() {
   const section4 = useRef(null);
   const sections = [section1, section2, section3, section4];
 
-  // دالة فتح الدعوة (تبهيت المغلف وانسيابيته)
+  // دالة فتح الدعوة بتركيز كامل
   const handleOpenInvitation = () => {
-    setIsFading(true);
+    setIsOpened(true);
     
     if (audioRef.current) {
       audioRef.current.play().catch(error => console.log("Audio play failed", error));
     }
-
-    // إخفاء المغلف تماماً بعد انتهاء تأثير التبهيت (بعد ثانية واحدة)
-    setTimeout(() => {
-      setIsOpened(true);
-    }, 1000); 
   };
 
   // نظام النزول التلقائي (كل 4 ثوانٍ)
@@ -116,33 +110,34 @@ export default function Home() {
           animation: tapMove 1.5s infinite ease-in-out;
         }
 
-        /* ================= حركة التبهيت والتلاشي الفاخرة للمغلف ================= */
-        .envelope-screen {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          backgroundColor: #1a2b4c;
-          backgroundImage: url('/envelope.jpg');
-          backgroundPosition: center center;
-          backgroundRepeat: no-repeat;
-          background-size: contain;
-          z-index: 50;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          transition: opacity 1s ease, transform 1s ease;
-          opacity: ${isFading ? '0' : '1'};
-          transform: ${isFading ? 'scale(1.05)' : 'scale(1)'};
-          pointer-events: ${isFading ? 'none' : 'auto'};
+        /* تأثير ظهور سلس للدعوة عند الفتح */
+        .invitation-container {
+          opacity: ${isOpened ? '1' : '0'};
+          transform: translateY(${isOpened ? '0' : '20px'});
+          transition: opacity 0.8s ease, transform 0.8s ease;
         }
       `}</style>
 
-      {/* ================= شاشة المغلف المتلاشية ================= */}
-      {!isOpened && (
-        <div className="envelope-screen">
+      {/* ================= خلفية المغلف الثابتة والمضبوطة تماماً ================= */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: '#1a2b4c',
+        backgroundImage: 'url(\'/envelope.jpg\')',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        zIndex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        
+        {/* زر الختم التفاعلي (يختفي فور الضغط عليه) */}
+        {!isOpened && (
           <button 
             onClick={handleOpenInvitation}
             className="wax-seal-container"
@@ -161,18 +156,19 @@ export default function Home() {
               transform: 'translate(-50%, -50%)',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              zIndex: 10
             }}
           >
             <span className="tap-icon" style={{ fontSize: '1.8rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
               👆
             </span>
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* ================= المحتوى الرئيسي للدعوة ================= */}
-      <main style={{ 
+      {/* ================= المحتوى الرئيسي للدعوة (يظهر فوق المغلف بسلاسة) ================= */}
+      <main className="invitation-container" style={{ 
         direction: 'rtl',
         height: '100vh',
         overflowY: 'scroll',
@@ -180,7 +176,9 @@ export default function Home() {
         scrollBehavior: 'smooth',
         position: 'relative',
         backgroundColor: '#f8f4ee',
-        display: isOpened ? 'block' : 'none'
+        zIndex: 2,
+        visibility: isOpened ? 'visible' : 'hidden',
+        pointerEvents: isOpened ? 'auto' : 'none'
       }}>
         
         <div style={{
