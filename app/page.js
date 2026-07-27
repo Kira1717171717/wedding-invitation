@@ -9,7 +9,6 @@ export default function Home() {
   const [submitted, setSubmitted] = useState(false);
 
   const audioRef = useRef(null);
-  const s1 = useRef(null);
   const s2 = useRef(null);
   const s3 = useRef(null);
   const s4 = useRef(null);
@@ -62,6 +61,31 @@ export default function Home() {
           font-family: 'Noto Kufi Arabic', sans-serif;
           background-color: #0b131f;
           color: #ffffff;
+        }
+
+        /* صورة خلفية الدعوة الأساسية wedding-bg.jpg لتغطي كامل الصفحة خلف البطاقات */
+        .global-wedding-bg {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-image: url('/wedding-bg.jpg');
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          z-index: 1;
+        }
+
+        /* طبقة عزل خفيفة لضمان وضوح النصوص فوق الصورة */
+        .bg-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(11, 19, 31, 0.4);
+          z-index: 2;
         }
 
         /* لمسة لمعان ذهبي ناعم يمر على الثريا والإطار كل 8-10 ثواني */
@@ -125,7 +149,7 @@ export default function Home() {
         .card-box {
           width: 88%;
           max-width: 360px;
-          background: rgba(13, 27, 42, 0.88);
+          background: rgba(13, 27, 42, 0.82);
           backdrop-filter: blur(12px);
           border: 1.5px solid rgba(212, 175, 55, 0.6);
           border-radius: 16px;
@@ -136,6 +160,7 @@ export default function Home() {
           align-items: center;
           text-align: center;
           box-sizing: border-box;
+          z-index: 10;
         }
 
         /* تخصيص مدخلات الـ RSVP */
@@ -158,6 +183,10 @@ export default function Home() {
         }
       `}</style>
 
+      {/* خلفية الصورة العامة wedding-bg.jpg */}
+      <div className="global-wedding-bg" />
+      <div className="bg-overlay" />
+
       {/* ================= الصفحة الأولى: المغلف ✉️ ================= */}
       <div style={{
         position: 'fixed',
@@ -178,7 +207,6 @@ export default function Home() {
         transition: 'opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.9s',
         pointerEvents: isOpened ? 'none' : 'auto'
       }}>
-        {/* زر الفتح في المنتصف بالأيقونة ذات اللون #c39fa3 */}
         <button 
           onClick={handleOpenInvitation}
           style={{
@@ -212,6 +240,8 @@ export default function Home() {
 
       {/* ================= التجربة الرئيسية والتمرير (الصفحات 2 إلى 7) ================= */}
       <main style={{
+        position: 'relative',
+        zIndex: 5,
         height: '100vh',
         width: '100vw',
         overflowY: isOpened ? 'scroll' : 'hidden',
@@ -220,7 +250,7 @@ export default function Home() {
         direction: 'rtl'
       }}>
 
-        {/* الصفحة الثانية: الأسماء + التاريخ + زر الفتح لمواصلة التجربة */}
+        {/* الصفحة الثانية */}
         <section ref={s2} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <div className="card-box shimmer-frame">
             <p style={{ fontSize: '0.8rem', color: '#d4af37', letterSpacing: '3px', margin: 0, fontFamily: 'Cinzel' }}>WEDDING INVITATION</p>
@@ -234,10 +264,10 @@ export default function Home() {
               Open Invitation
             </div>
           </div>
-          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', textShadow: '0 2px 4px #000' }}>↓</div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', zIndex: 10 }}>↓</div>
         </section>
 
-        {/* الصفحة الثالثة: دعوة بحب وفرح (عربي + إنجليزي) */}
+        {/* الصفحة الثالثة */}
         <section ref={s3} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <div className="card-box shimmer-frame">
             <span style={{ fontSize: '1.6rem', marginBottom: '0.5rem' }}>✨</span>
@@ -253,10 +283,10 @@ export default function Home() {
               Your presence will make our celebration truly special.
             </p>
           </div>
-          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem' }}>↓</div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', zIndex: 10 }}>↓</div>
         </section>
 
-        {/* الصفحة الرابعة: العد التنازلي فقط بالأرقام المتحركة */}
+        {/* الصفحة الرابعة */}
         <section ref={s4} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <div className="card-box shimmer-frame">
             <p style={{ fontSize: '0.8rem', color: '#d4af37', letterSpacing: '2px', fontFamily: 'Cinzel', margin: '0 0 1rem 0' }}>COUNTDOWN</p>
@@ -282,10 +312,10 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem' }}>↓</div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', zIndex: 10 }}>↓</div>
         </section>
 
-        {/* الصفحة الخامسة: المكان والزمان + خرائط جوجل */}
+        {/* الصفحة الخامسة */}
         <section ref={s5} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <div className="card-box shimmer-frame">
             <span style={{ fontSize: '1.5rem', marginBottom: '0.3rem' }}>📍</span>
@@ -313,10 +343,10 @@ export default function Home() {
               Open in Google Maps 🗺️
             </a>
           </div>
-          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem' }}>↓</div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', zIndex: 10 }}>↓</div>
         </section>
 
-        {/* الصفحة السادسة: تأكيد الحضور RSVP */}
+        {/* الصفحة السادسة */}
         <section ref={s6} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <div className="card-box shimmer-frame">
             <h2 style={{ fontSize: '1.3rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0 0 1rem 0' }}>RSVP</h2>
@@ -377,15 +407,15 @@ export default function Home() {
               </div>
             )}
           </div>
-          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem' }}>↓</div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', zIndex: 10 }}>↓</div>
         </section>
 
-        {/* الصفحة السابعة والأخيرة: Thank You */}
+        {/* الصفحة السابعة */}
         <section ref={s7} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <div className="card-box shimmer-frame">
             <h2 style={{ fontSize: '1.8rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0 0 0.5rem 0' }}>Thank You</h2>
             <p style={{ fontSize: '0.95rem', color: '#ffffff', lineHeight: '1.6', fontWeight: '600', margin: 0 }}>
-              We Can't Wait To Celebrate With You
+              We Can'Wait To Celebrate With You
             </p>
             <div style={{ width: '40px', height: '1.5px', backgroundColor: '#d4af37', margin: '1.2rem 0' }}></div>
             <p style={{ fontSize: '0.85rem', color: '#9ca3af', fontFamily: 'Cinzel', margin: 0 }}>05 August 2026</p>
