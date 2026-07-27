@@ -178,7 +178,7 @@ export default function Home() {
         transition: 'opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.9s',
         pointerEvents: isOpened ? 'none' : 'auto'
       }}>
-        {/* زر الفتح في المنتصف */}
+        {/* زر الفتح في المنتصف بالأيقونة ذات اللون #c39fa3 */}
         <button 
           onClick={handleOpenInvitation}
           style={{
@@ -190,15 +190,23 @@ export default function Home() {
             height: '80px',
             borderRadius: '50%',
             backgroundColor: 'transparent',
-            border: '2px solid rgba(212, 175, 55, 0.8)',
+            border: '2px solid #c39fa3',
             cursor: 'pointer',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            boxShadow: '0 0 20px rgba(212, 175, 55, 0.4)'
+            boxShadow: '0 0 20px rgba(195, 159, 163, 0.4)'
           }}
         >
-          <span style={{ fontSize: '1.8rem' }}>👆</span>
+          <svg 
+            width="38" 
+            height="38" 
+            viewBox="0 0 24 24" 
+            fill="#c39fa3" 
+            className="swipe-hint"
+          >
+            <path d="M9 11.24V7.5C9 6.12 10.12 5 11.5 5S14 6.12 14 7.5v3.74c1.21-.81 2-2.18 2-3.74 0-2.48-2.02-4.5-4.5-4.5S7 5.02 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63l-4.54-2.26c-.32-.16-.68-.25-1.05-.25H12V7.5c0-.83-.67-1.5-1.5-1.5S9 6.67 9 7.5v10.74l-3.44-.72c-.38-.08-.78.04-1.06.31l-.75.75 5.03 5.03c.51.51 1.2.8 1.92.8h6.58c1.27 0 2.37-.88 2.65-2.12l1.09-4.88c.18-.81-.19-1.63-.93-2.02z"/>
+          </svg>
         </button>
       </div>
 
