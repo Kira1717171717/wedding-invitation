@@ -5,64 +5,45 @@ import { useState, useEffect, useRef } from 'react';
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [rsvpData, setRsvpData] = useState({ name: '', guests: '1', status: 'yes' });
+  const [submitted, setSubmitted] = useState(false);
 
   const audioRef = useRef(null);
-  const section1 = useRef(null);
-  const section2 = useRef(null);
-  const section3 = useRef(null);
-  const section4 = useRef(null);
-  const sections = [section1, section2, section3, section4];
+  const s1 = useRef(null);
+  const s2 = useRef(null);
+  const s3 = useRef(null);
+  const s4 = useRef(null);
+  const s5 = useRef(null);
+  const s6 = useRef(null);
+  const s7 = useRef(null);
 
   const handleOpenInvitation = () => {
     setIsOpened(true);
-    
     if (audioRef.current) {
-      audioRef.current.play().catch(error => console.log("Audio play failed", error));
+      audioRef.current.play().catch(err => console.log("Audio play failed:", err));
     }
   };
-
-  useEffect(() => {
-    if (!isOpened) return;
-
-    const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => {
-        const nextIndex = (prevIndex + 1) % sections.length;
-        sections[nextIndex].current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
-        });
-        return nextIndex;
-      });
-    }, 4000);
-
-    return () => clearInterval(timer);
-  }, [isOpened]);
 
   useEffect(() => {
     const targetDate = new Date('2026-08-05T19:00:00').getTime();
     const interval = setInterval(() => {
       const now = new Date().getTime();
-      const difference = targetDate - now;
-      if (difference > 0) {
+      const diff = targetDate - now;
+      if (diff > 0) {
         setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / (1000 * 60)) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((diff / (1000 * 60)) % 60),
+          seconds: Math.floor((diff / 1000) % 60),
         });
       }
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  const scrollToNext = (index) => {
-    const nextIndex = (index + 1) % sections.length;
-    setCurrentIndex(nextIndex);
-    sections[nextIndex].current?.scrollIntoView({ 
-      behavior: 'smooth',
-      block: 'start'
-    });
+  const handleRsvpSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
   };
 
   return (
@@ -70,226 +51,339 @@ export default function Home() {
       <audio ref={audioRef} src="/song.mp3" loop />
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&family=Cinzel:wght@500;700;800&display=swap');
         
-        body, main {
-          font-family: 'Noto Kufi Arabic', sans-serif;
+        html, body {
           margin: 0;
           padding: 0;
-          overflow-y: ${isOpened ? 'scroll' : 'hidden'};
-          overflow-x: hidden;
-          background-color: #1a1612;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          font-family: 'Noto Kufi Arabic', sans-serif;
+          background-color: #0b131f;
+          color: #ffffff;
         }
 
-        @keyframes bounce {
-          0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-          40% { transform: translateY(-5px); }
-          60% { transform: translateY(-3px); }
-        }
-        .scroll-btn {
-          animation: bounce 2s infinite;
-        }
-
-        @keyframes sealGlow {
-          0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.8); }
-          70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-        }
-        .wax-seal-btn {
-          animation: sealGlow 2s infinite;
+        /* لمسة لمعان ذهبي ناعم يمر على الثريا والإطار كل 8-10 ثواني */
+        @keyframes peacockGlow {
+          0% {
+            background-position: -200% 0;
+            opacity: 0.3;
+          }
+          20% {
+            background-position: 200% 0;
+            opacity: 0.8;
+          }
+          100% {
+            background-position: 200% 0;
+            opacity: 0.3;
+          }
         }
 
-        @keyframes tapMove {
-          0%, 100% { transform: translateY(0) scale(1); }
-          50% { transform: translateY(4px) scale(0.95); }
+        .shimmer-frame {
+          position: relative;
+          overflow: hidden;
         }
-        .tap-icon {
-          animation: tapMove 1.5s infinite ease-in-out;
+
+        .shimmer-frame::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            110deg, 
+            transparent 30%, 
+            rgba(212, 175, 55, 0.4) 50%, 
+            transparent 70%
+          );
+          background-size: 200% 100%;
+          animation: peacockGlow 9s infinite ease-in-out;
+          pointer-events: none;
+          border-radius: inherit;
+        }
+
+        /* حركة خفيفة للسهام السفلية لتوجيه المستخدم بالسحب */
+        @keyframes floatDown {
+          0%, 100% { transform: translateY(0); opacity: 0.6; }
+          50% { transform: translateY(8px); opacity: 1; }
+        }
+        .swipe-hint {
+          animation: floatDown 2s infinite ease-in-out;
+        }
+
+        /* أنيميشن الأرقام للعد التنازلي */
+        @keyframes pulseNum {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); color: #d4af37; }
+        }
+        .num-animate {
+          animation: pulseNum 2s infinite ease-in-out;
+        }
+
+        .card-box {
+          width: 88%;
+          max-width: 360px;
+          background: rgba(13, 27, 42, 0.88);
+          backdrop-filter: blur(12px);
+          border: 1.5px solid rgba(212, 175, 55, 0.6);
+          border-radius: 16px;
+          padding: 2rem 1.2rem;
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          box-sizing: border-box;
+        }
+
+        /* تخصيص مدخلات الـ RSVP */
+        .rsvp-input {
+          width: 100%;
+          padding: 0.75rem;
+          margin-bottom: 0.8rem;
+          border-radius: 8px;
+          border: 1px solid rgba(212, 175, 55, 0.4);
+          background: rgba(255, 255, 255, 0.07);
+          color: #fff;
+          font-family: inherit;
+          font-size: 0.85rem;
+          text-align: center;
+          outline: none;
+        }
+        .rsvp-input:focus {
+          border-color: #d4af37;
+          background: rgba(255, 255, 255, 0.12);
         }
       `}</style>
 
-      {/* ================= شاشة المغلف الأمامي الفاخر المدمج مع خلفية القماش ================= */}
+      {/* ================= الصفحة الأولى: المغلف ✉️ ================= */}
       <div style={{
         position: 'fixed',
         top: 0,
         left: 0,
         width: '100vw',
         height: '100vh',
-        backgroundColor: '#f7efe5',
-        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(226,208,193,0.9) 100%)',
-        zIndex: 50,
+        backgroundImage: 'url(\'/envelope.jpg\')',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        zIndex: 100,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         opacity: isOpened ? 0 : 1,
         visibility: isOpened ? 'hidden' : 'visible',
-        transition: 'opacity 0.8s ease, visibility 0.8s ease',
+        transition: 'opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.9s',
         pointerEvents: isOpened ? 'none' : 'auto'
       }}>
-        {/* صندوق المغلف الكحلي المصمم بمسقط أمامي دقيق */}
-        <div style={{
-          width: '340px',
-          height: '230px',
-          backgroundColor: '#1b263b',
-          borderRadius: '6px',
-          boxShadow: '0 15px 35px rgba(0,0,0,0.3), inset 0 0 15px rgba(255,255,255,0.05)',
-          position: 'relative',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          border: '1px solid rgba(212, 175, 55, 0.3)'
-        }}>
-          {/* لسان المغلف العلوي (المثلث) */}
-          <div style={{
+        {/* زر الفتح في المنتصف */}
+        <button 
+          onClick={handleOpenInvitation}
+          style={{
             position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '0',
-            height: '0',
-            borderLeft: '170px solid transparent',
-            borderRight: '170px solid transparent',
-            borderTop: '115px solid #141d2d',
-            filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.2))'
-          }} />
-
-          {/* خط طيات المغلف الجانبية */}
-          <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.15) 50%), linear-gradient(225deg, transparent 50%, rgba(0,0,0,0.15) 50%)',
-            pointerEvents: 'none',
-            borderRadius: '6px'
-          }} />
-
-          {/* الختم الشمعي في منتصف المغلف */}
-          <button 
-            onClick={handleOpenInvitation}
-            className="wax-seal-btn"
-            title="اضغط لفتح الدعوة"
-            style={{
-              position: 'absolute',
-              width: '65px',
-              height: '65px',
-              borderRadius: '50%',
-              backgroundColor: '#d4af37',
-              border: '2px solid #fff',
-              cursor: 'pointer',
-              outline: 'none',
-              top: '42%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.4)',
-              zIndex: 10
-            }}
-          >
-            <span className="tap-icon" style={{ fontSize: '1.4rem', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.4))' }}>
-              👆
-            </span>
-          </button>
-        </div>
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '80px',
+            height: '80px',
+            borderRadius: '50%',
+            backgroundColor: 'transparent',
+            border: '2px solid rgba(212, 175, 55, 0.8)',
+            cursor: 'pointer',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            boxShadow: '0 0 20px rgba(212, 175, 55, 0.4)'
+          }}
+        >
+          <span style={{ fontSize: '1.8rem' }}>👆</span>
+        </button>
       </div>
 
-      {/* ================= الشاشة الرئيسية للدعوة (بخلفية ذهبية ملكية وبطاقة بيضاء واضحة) ================= */}
-      <main style={{ 
-        direction: 'rtl',
+      {/* ================= التجربة الرئيسية والتمرير (الصفحات 2 إلى 7) ================= */}
+      <main style={{
         height: '100vh',
+        width: '100vw',
         overflowY: isOpened ? 'scroll' : 'hidden',
         scrollSnapType: 'y mandatory',
         scrollBehavior: 'smooth',
-        position: 'relative',
-        backgroundColor: '#1a1612'
+        direction: 'rtl'
       }}>
-        
-        {/* الخلفية الذهبية الفخمة */}
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100vh',
-          backgroundColor: '#1a1612',
-          backgroundImage: 'radial-gradient(circle, #3d3122 0%, #1a1612 100%)',
-          zIndex: 1,
-          pointerEvents: 'none'
-        }} />
 
-        <div style={{
-          position: 'relative',
-          zIndex: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}>
+        {/* الصفحة الثانية: الأسماء + التاريخ + زر الفتح لمواصلة التجربة */}
+        <section ref={s2} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div className="card-box shimmer-frame">
+            <p style={{ fontSize: '0.8rem', color: '#d4af37', letterSpacing: '3px', margin: 0, fontFamily: 'Cinzel' }}>WEDDING INVITATION</p>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#ffffff', margin: '0.8rem 0 0.2rem 0' }}>محمد & منار</h1>
+            <p style={{ fontSize: '1.1rem', color: '#d4af37', fontFamily: 'Cinzel', margin: 0, fontWeight: '600' }}>Mohammad & Manar</p>
+            <div style={{ width: '40px', height: '1.5px', backgroundColor: '#d4af37', margin: '1rem 0' }}></div>
+            <p style={{ fontSize: '0.9rem', color: '#e5e7eb', fontWeight: '600', margin: 0 }}>الأربعاء ، 05 أغسطس 2026</p>
+            <p style={{ fontSize: '0.75rem', color: '#9ca3af', fontFamily: 'Cinzel', margin: '0.2rem 0 1.5rem 0' }}>Wednesday, August 5, 2026</p>
 
-          {/* القسم الأول */}
-          <section ref={section1} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
-            <div style={{ width: '85%', backgroundColor: 'rgba(255, 255, 255, 0.95)', padding: '1.5rem 1rem', borderRadius: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
-              <p style={{ fontSize: '0.75rem', letterSpacing: '2px', color: '#1a1612', margin: 0, fontWeight: '700' }}>WEDDING INVITATION</p>
-              <p style={{ fontSize: '0.85rem', color: '#b89742', margin: 0, fontWeight: '700' }}>دعـوة زفــاف</p>
-              <h1 style={{ fontSize: '2.1rem', fontWeight: '800', color: '#1a1612', margin: '0.2rem 0' }}>محمد & منار</h1>
-              <p style={{ fontSize: '1.1rem', color: '#3d3122', margin: 0, fontWeight: '600' }}>Mohammad & Manar</p>
-              <div style={{ width: '40px', height: '1.5px', backgroundColor: '#b89742', margin: '0.5rem 0' }}></div>
-              <p style={{ fontSize: '0.9rem', color: '#1a1612', fontWeight: '700', margin: 0 }}>الأربعاء ، 05 أغسطس 2026</p>
-              <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: 0, fontWeight: '600' }}>Wednesday, August 5, 2026</p>
-              <button onClick={() => scrollToNext(0)} className="scroll-btn" style={{ marginTop: '1.2rem', background: 'transparent', border: '1.5px solid #b89742', borderRadius: '20px', padding: '0.3rem 1rem', color: '#1a1612', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>التالي ↓ Next</button>
+            <div style={{ padding: '0.6rem 1.4rem', backgroundColor: '#d4af37', color: '#0b131f', borderRadius: '30px', fontWeight: '700', fontSize: '0.85rem', fontFamily: 'Cinzel', boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)' }}>
+              Open Invitation
             </div>
-          </section>
+          </div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', textShadow: '0 2px 4px #000' }}>↓</div>
+        </section>
 
-          {/* القسم الثاني */}
-          <section ref={section2} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
-            <div style={{ width: '85%', backgroundColor: 'rgba(255, 255, 255, 0.95)', padding: '1.5rem 1rem', borderRadius: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '1.5rem' }}>💍</span>
-              <h2 style={{ fontSize: '1.3rem', color: '#1a1612', margin: 0, fontWeight: '700' }}>دعوة عقد قران</h2>
-              <p style={{ fontSize: '0.75rem', color: '#b89742', margin: 0, fontWeight: '600' }}>OFFICIAL INVITATION</p>
-              <div style={{ width: '40px', height: '1px', backgroundColor: '#b89742', margin: '0.3rem 0' }}></div>
-              <p style={{ fontSize: '0.85rem', color: '#3d3122', lineHeight: '1.7', margin: 0, fontWeight: '600' }}>"وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"</p>
-              <p style={{ fontSize: '0.75rem', color: '#4b5563', lineHeight: '1.6', margin: '0.3rem 0 0 0' }}>يسعدنا ويشرفنا دعوتكم لمشاركتنا أثمن لحظات العمر وأجملها في حفل زفافنا.</p>
-              <button onClick={() => scrollToNext(1)} className="scroll-btn" style={{ marginTop: '1rem', background: 'transparent', border: '1.5px solid #b89742', borderRadius: '20px', padding: '0.3rem 1rem', color: '#1a1612', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>التالي ↓ Next</button>
-            </div>
-          </section>
+        {/* الصفحة الثالثة: دعوة بحب وفرح (عربي + إنجليزي) */}
+        <section ref={s3} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div className="card-box shimmer-frame">
+            <span style={{ fontSize: '1.6rem', marginBottom: '0.5rem' }}>✨</span>
+            <p style={{ fontSize: '0.9rem', color: '#ffffff', lineHeight: '1.8', fontWeight: '600', margin: 0 }}>
+              بكل حب وفرح،<br />
+              نتشرف بدعوتكم لمشاركتنا أجمل يوم في حياتنا،<br />
+              فوجودكم هو أجمل هدية لنا.
+            </p>
+            <div style={{ width: '30px', height: '1px', backgroundColor: '#d4af37', margin: '1.2rem 0' }}></div>
+            <p style={{ fontSize: '0.8rem', color: '#d4af37', fontFamily: 'Cinzel', lineHeight: '1.7', margin: 0, fontWeight: '500' }}>
+              With love and joy,<br />
+              We warmly invite you to celebrate our wedding day.<br />
+              Your presence will make our celebration truly special.
+            </p>
+          </div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem' }}>↓</div>
+        </section>
 
-          {/* القسم الثالث */}
-          <section ref={section3} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
-            <div style={{ width: '85%', backgroundColor: 'rgba(255, 255, 255, 0.95)', padding: '1.5rem 1rem', borderRadius: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-              <h2 style={{ fontSize: '1.2rem', color: '#1a1612', margin: 0, fontWeight: '700' }}>العد التنازلي</h2>
-              <p style={{ fontSize: '0.7rem', color: '#b89742', margin: 0, fontWeight: '600' }}>COUNTDOWN</p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', margin: '0.5rem 0', direction: 'ltr' }}>
-                <div style={{ minWidth: '40px' }}><span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a1612' }}>{timeLeft.days}</span><p style={{ fontSize: '0.6rem', color: '#b89742', margin: 0, fontWeight: '700' }}>أيام</p></div>
-                <div style={{ fontSize: '1.1rem', color: '#b89742' }}>:</div>
-                <div style={{ minWidth: '40px' }}><span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a1612' }}>{timeLeft.hours}</span><p style={{ fontSize: '0.6rem', color: '#b89742', margin: 0, fontWeight: '700' }}>ساعات</p></div>
-                <div style={{ fontSize: '1.1rem', color: '#b89742' }}>:</div>
-                <div style={{ minWidth: '40px' }}><span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a1612' }}>{timeLeft.minutes}</span><p style={{ fontSize: '0.6rem', color: '#b89742', margin: 0, fontWeight: '700' }}>دقائق</p></div>
-                <div style={{ fontSize: '1.1rem', color: '#b89742' }}>:</div>
-                <div style={{ minWidth: '40px' }}><span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a1612' }}>{timeLeft.seconds}</span><p style={{ fontSize: '0.6rem', color: '#b89742', margin: 0, fontWeight: '700' }}>ثواني</p></div>
+        {/* الصفحة الرابعة: العد التنازلي فقط بالأرقام المتحركة */}
+        <section ref={s4} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div className="card-box shimmer-frame">
+            <p style={{ fontSize: '0.8rem', color: '#d4af37', letterSpacing: '2px', fontFamily: 'Cinzel', margin: '0 0 1rem 0' }}>COUNTDOWN</p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.8rem', direction: 'ltr' }}>
+              <div>
+                <span className="num-animate" style={{ fontSize: '1.8rem', fontWeight: '800', display: 'block' }}>{timeLeft.days}</span>
+                <p style={{ fontSize: '0.65rem', color: '#d4af37', margin: 0 }}>أيام</p>
               </div>
-              <div style={{ width: '35px', height: '1px', backgroundColor: '#b89742', margin: '0.3rem 0' }}></div>
-              <h3 style={{ color: '#1a1612', fontSize: '0.9rem', margin: 0, fontWeight: '700' }}>👔 الزي المعتمد / Dress Code</h3>
-              <p style={{ color: '#b89742', fontWeight: '700', fontSize: '0.8rem', margin: 0 }}>بدلة رسمية / Black Tie & Navy</p>
-              <button onClick={() => scrollToNext(2)} className="scroll-btn" style={{ marginTop: '1.0rem', background: 'transparent', border: '1.5px solid #b89742', borderRadius: '20px', padding: '0.3rem 1rem', color: '#1a1612', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>التالي ↓ Next</button>
+              <span style={{ fontSize: '1.3rem', color: '#d4af37' }}>:</span>
+              <div>
+                <span className="num-animate" style={{ fontSize: '1.8rem', fontWeight: '800', display: 'block' }}>{timeLeft.hours}</span>
+                <p style={{ fontSize: '0.65rem', color: '#d4af37', margin: 0 }}>ساعات</p>
+              </div>
+              <span style={{ fontSize: '1.3rem', color: '#d4af37' }}>:</span>
+              <div>
+                <span className="num-animate" style={{ fontSize: '1.8rem', fontWeight: '800', display: 'block' }}>{timeLeft.minutes}</span>
+                <p style={{ fontSize: '0.65rem', color: '#d4af37', margin: 0 }}>دقائق</p>
+              </div>
+              <span style={{ fontSize: '1.3rem', color: '#d4af37' }}>:</span>
+              <div>
+                <span className="num-animate" style={{ fontSize: '1.8rem', fontWeight: '800', display: 'block' }}>{timeLeft.seconds}</span>
+                <p style={{ fontSize: '0.65rem', color: '#d4af37', margin: 0 }}>ثواني</p>
+              </div>
             </div>
-          </section>
+          </div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem' }}>↓</div>
+        </section>
 
-          {/* القسم الرابع */}
-          <section ref={section4} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
-            <div style={{ width: '85%', backgroundColor: 'rgba(255, 255, 255, 0.95)', padding: '1.5rem 1rem', borderRadius: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '1.5rem' }}>📍</span>
-              <h2 style={{ fontSize: '1.3rem', color: '#1a1612', margin: 0, fontWeight: '700' }}>المكان والزمان</h2>
-              <p style={{ fontSize: '0.7rem', color: '#b89742', margin: 0, fontWeight: '600' }}>LOCATION & TIME</p>
-              <p style={{ fontSize: '0.95rem', fontWeight: '800', color: '#3d3122', margin: '0.3rem 0 0 0' }}>Yildiz Hall - قاعة يلدز</p>
-              <p style={{ color: '#4b5563', fontSize: '0.8rem', margin: 0, fontWeight: '600' }}>الأربعاء، 05 أغسطس 2026 - 7:00 مساءً</p>
-              <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" style={{ padding: '0.5rem 1.2rem', backgroundColor: '#1a1612', color: '#ffffff', borderRadius: '50px', textDecoration: 'none', fontSize: '0.78rem', fontWeight: '600', marginTop: '0.6rem', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.25)', textShadow: 'none' }}>موقع القاعة 🗺️ Google Maps</a>
-              <div style={{ width: '35px', height: '1px', backgroundColor: '#b89742', margin: '0.5rem 0' }}></div>
-              <p style={{ fontSize: '0.82rem', color: '#1a1612', margin: 0, fontWeight: '700' }}>أهلاً وسهلاً بكم، ننتظركم بشوق! ✨</p>
-            </div>
-          </section>
+        {/* الصفحة الخامسة: المكان والزمان + خرائط جوجل */}
+        <section ref={s5} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div className="card-box shimmer-frame">
+            <span style={{ fontSize: '1.5rem', marginBottom: '0.3rem' }}>📍</span>
+            <p style={{ fontSize: '0.85rem', color: '#d4af37', letterSpacing: '2px', fontFamily: 'Cinzel', margin: 0 }}>VENUE</p>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: '700', margin: '0.4rem 0 0.2rem 0' }}>Yildiz Hall</h2>
+            <p style={{ fontSize: '0.8rem', color: '#9ca3af', fontFamily: 'Cinzel', margin: '0 0 1rem 0' }}>Black Tie Weddings</p>
+            
+            <a 
+              href="https://maps.google.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                padding: '0.6rem 1.3rem',
+                backgroundColor: 'transparent',
+                border: '1.5px solid #d4af37',
+                color: '#d4af37',
+                borderRadius: '25px',
+                textDecoration: 'none',
+                fontSize: '0.8rem',
+                fontWeight: '600',
+                fontFamily: 'Cinzel',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
+              }}
+            >
+              Open in Google Maps 🗺️
+            </a>
+          </div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem' }}>↓</div>
+        </section>
 
-        </div>
+        {/* الصفحة السادسة: تأكيد الحضور RSVP */}
+        <section ref={s6} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div className="card-box shimmer-frame">
+            <h2 style={{ fontSize: '1.3rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0 0 1rem 0' }}>RSVP</h2>
+            
+            {!submitted ? (
+              <form onSubmit={handleRsvpSubmit} style={{ width: '100%' }}>
+                <input 
+                  type="text" 
+                  placeholder="Full Name" 
+                  required 
+                  className="rsvp-input"
+                  value={rsvpData.name}
+                  onChange={(e) => setRsvpData({ ...rsvpData, name: e.target.value })}
+                />
+                
+                <select 
+                  className="rsvp-input"
+                  value={rsvpData.guests}
+                  onChange={(e) => setRsvpData({ ...rsvpData, guests: e.target.value })}
+                >
+                  <option value="1" style={{ background: '#0b131f' }}>1 Guest</option>
+                  <option value="2" style={{ background: '#0b131f' }}>2 Guests</option>
+                  <option value="3" style={{ background: '#0b131f' }}>3 Guests</option>
+                </select>
+
+                <select 
+                  className="rsvp-input"
+                  value={rsvpData.status}
+                  onChange={(e) => setRsvpData({ ...rsvpData, status: e.target.value })}
+                >
+                  <option value="yes" style={{ background: '#0b131f' }}>Will Attend ✨</option>
+                  <option value="no" style={{ background: '#0b131f' }}>Apologize 🤍</option>
+                </select>
+
+                <button 
+                  type="submit"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    backgroundColor: '#d4af37',
+                    color: '#0b131f',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontWeight: '700',
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    marginTop: '0.4rem',
+                    boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)'
+                  }}
+                >
+                  Confirm Attendance
+                </button>
+              </form>
+            ) : (
+              <div style={{ padding: '1rem 0' }}>
+                <span style={{ fontSize: '2rem' }}>🎉</span>
+                <p style={{ fontSize: '0.9rem', color: '#d4af37', fontWeight: '700', marginTop: '0.5rem' }}>شكراً لك! تم تسجيل حضورك بنجاح.</p>
+              </div>
+            )}
+          </div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem' }}>↓</div>
+        </section>
+
+        {/* الصفحة السابعة والأخيرة: Thank You */}
+        <section ref={s7} style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div className="card-box shimmer-frame">
+            <h2 style={{ fontSize: '1.8rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0 0 0.5rem 0' }}>Thank You</h2>
+            <p style={{ fontSize: '0.95rem', color: '#ffffff', lineHeight: '1.6', fontWeight: '600', margin: 0 }}>
+              We Can't Wait To Celebrate With You
+            </p>
+            <div style={{ width: '40px', height: '1.5px', backgroundColor: '#d4af37', margin: '1.2rem 0' }}></div>
+            <p style={{ fontSize: '0.85rem', color: '#9ca3af', fontFamily: 'Cinzel', margin: 0 }}>05 August 2026</p>
+          </div>
+        </section>
+
       </main>
     </>
   );
