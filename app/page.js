@@ -92,32 +92,31 @@ export default function Home() {
 
         @keyframes sealGlow {
           0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.8); }
-          70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+          70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
           100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
         }
-        .wax-seal-container {
+        .wax-seal-btn {
           animation: sealGlow 2s infinite;
-          border-radius: 50%;
         }
 
         @keyframes tapMove {
           0%, 100% { transform: translateY(0) scale(1); }
-          50% { transform: translateY(6px) scale(0.95); }
+          50% { transform: translateY(4px) scale(0.95); }
         }
         .tap-icon {
           animation: tapMove 1.5s infinite ease-in-out;
         }
       `}</style>
 
-      {/* ================= شاشة المغلف بخلفية ذهبية فاخرة ================= */}
+      {/* ================= شاشة المغلف الأمامي الفاخر المدمج مع خلفية القماش ================= */}
       <div style={{
         position: 'fixed',
         top: 0,
         left: 0,
         width: '100vw',
         height: '100vh',
-        backgroundColor: '#1a1612',
-        backgroundImage: 'radial-gradient(circle, #3d3122 0%, #1a1612 100%)',
+        backgroundColor: '#f7efe5',
+        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(226,208,193,0.9) 100%)',
         zIndex: 50,
         display: 'flex',
         justifyContent: 'center',
@@ -127,40 +126,69 @@ export default function Home() {
         transition: 'opacity 0.8s ease, visibility 0.8s ease',
         pointerEvents: isOpened ? 'none' : 'auto'
       }}>
+        {/* صندوق المغلف الكحلي المصمم بمسقط أمامي دقيق */}
         <div style={{
-          width: '100vw',
-          height: '100vh',
-          backgroundImage: 'url(\'/envelope.jpg\')',
-          backgroundPosition: 'center center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'contain',
+          width: '340px',
+          height: '230px',
+          backgroundColor: '#1b263b',
+          borderRadius: '6px',
+          boxShadow: '0 15px 35px rgba(0,0,0,0.3), inset 0 0 15px rgba(255,255,255,0.05)',
           position: 'relative',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          border: '1px solid rgba(212, 175, 55, 0.3)'
         }}>
+          {/* لسان المغلف العلوي (المثلث) */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '0',
+            height: '0',
+            borderLeft: '170px solid transparent',
+            borderRight: '170px solid transparent',
+            borderTop: '115px solid #141d2d',
+            filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.2))'
+          }} />
+
+          {/* خط طيات المغلف الجانبية */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.15) 50%), linear-gradient(225deg, transparent 50%, rgba(0,0,0,0.15) 50%)',
+            pointerEvents: 'none',
+            borderRadius: '6px'
+          }} />
+
+          {/* الختم الشمعي في منتصف المغلف */}
           <button 
             onClick={handleOpenInvitation}
-            className="wax-seal-container"
+            className="wax-seal-btn"
             title="اضغط لفتح الدعوة"
             style={{
               position: 'absolute',
-              width: '105px',
-              height: '105px',
+              width: '65px',
+              height: '65px',
               borderRadius: '50%',
-              backgroundColor: 'transparent',
-              border: '2px solid rgba(212, 175, 55, 0.7)',
+              backgroundColor: '#d4af37',
+              border: '2px solid #fff',
               cursor: 'pointer',
               outline: 'none',
-              top: '52%',
+              top: '42%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.4)',
+              zIndex: 10
             }}
           >
-            <span className="tap-icon" style={{ fontSize: '1.8rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
+            <span className="tap-icon" style={{ fontSize: '1.4rem', filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.4))' }}>
               👆
             </span>
           </button>
@@ -178,7 +206,7 @@ export default function Home() {
         backgroundColor: '#1a1612'
       }}>
         
-        {/* الخلفية الذهبية الفخمة المتناسقة مع الختم والمغلف */}
+        {/* الخلفية الذهبية الفخمة */}
         <div style={{
           position: 'fixed',
           top: 0,
