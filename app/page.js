@@ -22,42 +22,22 @@ export default function Home() {
           src="/envelope.jpg"
           alt="Envelope"
           onClick={openEnvelope}
-          className="w-full h-screen object-contain cursor-pointer"
+          className="max-w-full max-h-screen object-contain cursor-pointer"
           style={{
-            transition: "0.9s ease",
-            transform: opening ? "scale(1.1)" : "scale(1)",
+            transition: "transform 0.9s ease, opacity 0.9s ease",
+            transform: opening ? "scale(1.05)" : "scale(1)",
             opacity: opening ? 0 : 1,
           }}
         />
       )}
 
       {opened && (
-        <div
-          className="w-full h-screen flex items-center justify-center"
-          style={{
-            animation: "fadeIn 1s ease",
-          }}
-        >
-          <img
-            src="/wedding-bg.jpg"
-            alt="Wedding Invitation"
-            className="max-w-full max-h-full object-contain"
-          />
-        </div>
+        <img
+          src="/wedding-bg.jpg"
+          alt="Wedding Invitation"
+          className="max-w-full max-h-screen object-contain"
+        />
       )}
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: scale(0.85);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-      `}</style>
 
     </main>
   );
