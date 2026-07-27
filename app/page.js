@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -15,17 +14,13 @@ export default function Home() {
   const section4 = useRef(null);
   const sections = [section1, section2, section3, section4];
 
-  // دالة الفتح مع تأثير التلاشي السلس للمغلف
+  // دالة الفتح (إلغاء تفعيل المغلف بسلاسة)
   const handleOpenInvitation = () => {
-    setIsClosing(true);
+    setIsOpened(true);
     
     if (audioRef.current) {
       audioRef.current.play().catch(error => console.log("Audio play failed", error));
     }
-
-    setTimeout(() => {
-      setIsOpened(true);
-    }, 800); 
   };
 
   // نظام النزول التلقائي (كل 4 ثوانٍ)
@@ -84,7 +79,8 @@ export default function Home() {
           font-family: 'Noto Kufi Arabic', sans-serif;
           margin: 0;
           padding: 0;
-          overflow: ${isOpened ? 'auto' : 'hidden'};
+          overflow-y: ${isOpened ? 'scroll' : 'hidden'};
+          overflow-x: hidden;
           background-color: #1a2b4c;
         }
 
@@ -114,69 +110,65 @@ export default function Home() {
         .tap-icon {
           animation: tapMove 1.5s infinite ease-in-out;
         }
-
-        .envelope-screen {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background-color: #1a2b4c;
-          background-image: url('/envelope.jpg');
-          background-position: center center;
-          background-repeat: no-repeat;
-          background-size: contain;
-          z-index: 50;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          transition: opacity 0.8s ease;
-          opacity: ${isClosing ? '0' : '1'};
-          pointer-events: ${isClosing ? 'none' : 'auto'};
-        }
       `}</style>
 
-      {/* شاشة المغلف الثابتة والواضحة */}
-      {!isOpened && (
-        <div className="envelope-screen">
-          <button 
-            onClick={handleOpenInvitation}
-            className="wax-seal-container"
-            title="اضغط لفتح الدعوة"
-            style={{
-              position: 'absolute',
-              width: '105px',
-              height: '105px',
-              borderRadius: '50%',
-              backgroundColor: 'transparent',
-              border: '2px solid rgba(197, 160, 89, 0.5)',
-              cursor: 'pointer',
-              outline: 'none',
-              top: '52%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <span className="tap-icon" style={{ fontSize: '1.8rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
-              👆
-            </span>
-          </button>
-        </div>
-      )}
+      {/* ================= طبقة المغلف المتلاشية (تبقى ثابتة وبأبعادها الصحيحة حتى يتم الفتح) ================= */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: '#1a2b4c',
+        backgroundImage: 'url(\'/envelope.jpg\')',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        zIndex: 50,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        opacity: isOpened ? 0 : 1,
+        visibility: isOpened ? 'hidden' : 'visible',
+        transition: 'opacity 0.8s ease, visibility 0.8s ease',
+        pointerEvents: isOpened ? 'none' : 'auto'
+      }}>
+        <button 
+          onClick={handleOpenInvitation}
+          className="wax-seal-container"
+          title="اضغط لفتح الدعوة"
+          style={{
+            position: 'absolute',
+            width: '105px',
+            height: '105px',
+            borderRadius: '50%',
+            backgroundColor: 'transparent',
+            border: '2px solid rgba(197, 160, 89, 0.5)',
+            cursor: 'pointer',
+            outline: 'none',
+            top: '52%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <span className="tap-icon" style={{ fontSize: '1.8rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
+            👆
+          </span>
+        </button>
+      </div>
 
-      {/* المحتوى الرئيسي الثابت والمنظم */}
+      {/* ================= الشاشة الرئيسية الثابتة والمنظمة بالكامل ================= */}
       <main style={{ 
         direction: 'rtl',
         height: '100vh',
-        overflowY: 'scroll',
+        overflowY: isOpened ? 'scroll' : 'hidden',
         scrollSnapType: 'y mandatory',
         scrollBehavior: 'smooth',
         position: 'relative',
-        backgroundColor: '#f8f4ee',
-        display: isOpened ? 'block' : 'none'
+        backgroundColor: '#f8f4ee'
       }}>
         
         <div style={{
@@ -242,7 +234,7 @@ export default function Home() {
               <div style={{ width: '35px', height: '1px', backgroundColor: '#c5a059', margin: '0.3rem 0' }}></div>
               <h3 style={{ color: '#1a2b4c', fontSize: '0.9rem', margin: 0, fontWeight: '700' }}>👔 الزي المعتمد / Dress Code</h3>
               <p style={{ color: '#c5a059', fontWeight: '700', fontSize: '0.8rem', margin: 0 }}>بدلة رسمية / Black Tie & Navy</p>
-              <button onClick={() => scrollToNext(2)} className="scroll-btn" style={{ marginTop: '1rem', background: 'transparent', border: '1.5px solid #c5a059', borderRadius: '20px', padding: '0.3rem 1rem', color: '#1a2b4c', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>التالي ↓ Next</button>
+              <button onClick={() => scrollToNext(2)} className="scroll-btn" style={{ marginTop: '1.0rem', background: 'transparent', border: '1.5px solid #c5a059', borderRadius: '20px', padding: '0.3rem 1rem', color: '#1a2b4c', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}>التالي ↓ Next</button>
             </div>
           </section>
 
