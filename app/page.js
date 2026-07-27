@@ -32,14 +32,24 @@ export default function Home() {
       )}
 
       {opened && (
-        <img
-          src="/wedding-bg.jpg"
-          alt="Wedding Invitation"
-          className="w-full h-screen object-contain"
-          style={{
-            animation: "cardOpen 1s ease",
-          }}
-        />
+        <div className="relative w-full h-screen flex items-center justify-center">
+
+          <img
+            src="/wedding-bg.jpg"
+            alt="Wedding Invitation"
+            className="w-full h-screen object-contain"
+            style={{
+              animation: "cardOpen 1s ease",
+            }}
+          />
+
+          <button
+            className="absolute bottom-20 px-10 py-4 rounded-full bg-[#c9a45c] text-[#07182f] font-semibold tracking-wide shadow-lg"
+          >
+            Open Invitation
+          </button>
+
+        </div>
       )}
 
       <style jsx>{`
@@ -48,11 +58,14 @@ export default function Home() {
             opacity: 0;
             transform: scale(0.6);
           }
+
           60% {
             opacity: 1;
             transform: scale(1.05);
           }
+
           100% {
+            opacity: 1;
             transform: scale(1);
           }
         }
