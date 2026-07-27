@@ -78,7 +78,7 @@ export default function Home() {
           overflow: hidden;
           font-family: 'Noto Kufi Arabic', sans-serif;
           background-color: #ffffff;
-          color: #0a1128; /* لون كحلي للنصوص */
+          color: #0a1128;
         }
 
         /* تحريك أرقام العد التنازلي */
@@ -99,7 +99,7 @@ export default function Home() {
           animation: floatDown 2s infinite ease-in-out;
         }
 
-        /* حاوية النص المباشرة الكحلية مع ظل فاتح لزيادة الوضوح */
+        /* حاوية النص المباشرة الكحلية */
         .direct-text-container {
           width: 85%;
           max-width: 420px;
@@ -109,7 +109,7 @@ export default function Home() {
           text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9), 0 0 10px rgba(255, 255, 255, 0.7);
         }
 
-        /* تخصيص مدخلات الـ RSVP باللون الكحلي والحدود الذهبية */
+        /* تخصيص مدخلات الـ RSVP */
         .rsvp-input {
           width: 100%;
           padding: 0.75rem;
@@ -127,14 +127,14 @@ export default function Home() {
         }
       `}</style>
 
-      {/* ================= الصفحة الأولى: المغلف ✉️ ================= */}
+      {/* ================= الصفحة الأولى: المغلف ✉️ (تحديث الامتداد إلى PNG) ================= */}
       <div style={{
         position: 'fixed',
         top: 0,
         left: 0,
         width: '100vw',
         height: '100vh',
-        backgroundImage: 'url(\'/envelope.jpg\')',
+        backgroundImage: 'url(\'/envelope.png\')',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
@@ -224,7 +224,7 @@ export default function Home() {
           <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#0a1128', fontSize: '1.2rem', textShadow: '0 1px 3px #fff' }}>↓</div>
         </section>
 
-        {/* باقي الصفحات على صورة (background.jpg) النقية بدون أي تغطية كحلية */}
+        {/* باقي الصفحات على صورة (background.jpg) */}
         <div style={{
           position: 'relative',
           width: '100%',
