@@ -30,14 +30,12 @@ export default function Home() {
         const maxScroll = mainRef.current.scrollHeight - pageHeight;
 
         if (currentScroll >= maxScroll - 10) {
-          // الوصول للنهاية -> العودة للبداية
           mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
-          // الانتقال للصفحة التالية
           mainRef.current.scrollTo({ top: currentScroll + pageHeight, behavior: 'smooth' });
         }
       }
-    }, 4000); // 4 ثوانٍ
+    }, 4000);
 
     return () => clearInterval(autoScrollInterval);
   }, [isOpened]);
@@ -79,14 +77,14 @@ export default function Home() {
           height: 100%;
           overflow: hidden;
           font-family: 'Noto Kufi Arabic', sans-serif;
-          background-color: #0a1128; /* Navy Blue */
-          color: #ffffff;
+          background-color: #ffffff;
+          color: #0a1128; /* لون كحلي للنصوص */
         }
 
         /* تحريك أرقام العد التنازلي */
         @keyframes pulseNum {
           0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05); color: #d4af37; }
+          50% { transform: scale(1.05); color: #b8860b; }
         }
         .num-animate {
           animation: pulseNum 2s infinite ease-in-out;
@@ -101,29 +99,31 @@ export default function Home() {
           animation: floatDown 2s infinite ease-in-out;
         }
 
-        /* كلاس النص المباشر بدون خلفية */
+        /* حاوية النص المباشرة الكحلية مع ظل فاتح لزيادة الوضوح */
         .direct-text-container {
           width: 85%;
           max-width: 420px;
           text-align: center;
           box-sizing: border-box;
-          text-shadow: 0 2px 10px rgba(10, 17, 40, 0.9), 0 0 25px rgba(0, 0, 0, 0.7);
+          color: #0a1128;
+          text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9), 0 0 10px rgba(255, 255, 255, 0.7);
         }
 
-        /* تخصيص مدخلات الـ RSVP بدون خلفية معتمة */
+        /* تخصيص مدخلات الـ RSVP باللون الكحلي والحدود الذهبية */
         .rsvp-input {
           width: 100%;
           padding: 0.75rem;
           margin-bottom: 0.8rem;
           border-radius: 8px;
-          border: 1.5px solid rgba(212, 175, 55, 0.8);
-          background: rgba(10, 17, 40, 0.6);
-          color: #fff;
+          border: 1.5px solid #d4af37;
+          background: rgba(255, 255, 255, 0.85);
+          color: #0a1128;
           font-family: inherit;
           font-size: 0.85rem;
           text-align: center;
           outline: none;
           backdrop-filter: blur(4px);
+          font-weight: 700;
         }
       `}</style>
 
@@ -178,7 +178,7 @@ export default function Home() {
         </button>
       </div>
 
-      {/* ================= التجربة الرئيسية والتمرير (الأسماء على wedding-bg ثم الباقي على background) ================= */}
+      {/* ================= التجربة الرئيسية والتمرير ================= */}
       <main 
         ref={mainRef}
         style={{
@@ -193,7 +193,7 @@ export default function Home() {
         }}
       >
 
-        {/* الصفحة الأولى بعد المغلف: بطاقة الدعوة (wedding-bg.jpg) كصورة ثابتة ملء الشاشة */}
+        {/* الصفحة الأولى بعد المغلف: بطاقة الدعوة الأصلية (wedding-bg.jpg) */}
         <section style={{ 
           height: '100vh', 
           width: '100%', 
@@ -214,21 +214,21 @@ export default function Home() {
             left: '50%',
             transform: 'translate(-50%, -50%)'
           }}>
-            <p style={{ fontSize: '0.9rem', color: '#d4af37', letterSpacing: '4px', margin: 0, fontFamily: 'Cinzel', fontWeight: '700' }}>WEDDING INVITATION</p>
-            <h1 style={{ fontSize: '2.8rem', fontWeight: '800', color: '#ffffff', margin: '0.8rem 0 0.2rem 0' }}>محمد & منار</h1>
-            <p style={{ fontSize: '1.3rem', color: '#d4af37', fontFamily: 'Cinzel', margin: 0, fontWeight: '700' }}>Mohammad & Manar</p>
+            <p style={{ fontSize: '0.9rem', color: '#b8860b', letterSpacing: '4px', margin: 0, fontFamily: 'Cinzel', fontWeight: '800' }}>WEDDING INVITATION</p>
+            <h1 style={{ fontSize: '2.8rem', fontWeight: '800', color: '#0a1128', margin: '0.8rem 0 0.2rem 0' }}>محمد & منار</h1>
+            <p style={{ fontSize: '1.3rem', color: '#b8860b', fontFamily: 'Cinzel', margin: 0, fontWeight: '700' }}>Mohammad & Manar</p>
             <div style={{ width: '60px', height: '2px', backgroundColor: '#d4af37', margin: '1.5rem auto' }}></div>
-            <p style={{ fontSize: '1.1rem', color: '#ffffff', fontWeight: '700', margin: 0 }}>الأربعاء ، 05 أغسطس 2026</p>
-            <p style={{ fontSize: '0.9rem', color: '#d4af37', fontFamily: 'Cinzel', margin: '0.3rem 0 0 0', fontWeight: '600' }}>Wednesday, August 5, 2026</p>
+            <p style={{ fontSize: '1.1rem', color: '#0a1128', fontWeight: '800', margin: 0 }}>الأربعاء ، 05 أغسطس 2026</p>
+            <p style={{ fontSize: '0.9rem', color: '#b8860b', fontFamily: 'Cinzel', margin: '0.3rem 0 0 0', fontWeight: '700' }}>Wednesday, August 5, 2026</p>
           </div>
-          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', textShadow: '0 2px 4px #000' }}>↓</div>
+          <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#0a1128', fontSize: '1.2rem', textShadow: '0 1px 3px #fff' }}>↓</div>
         </section>
 
-        {/* الحاوية الداخلية التي تحمل الخلفية الجديدة (background.jpg) الممتدة لباقي الصفحات */}
+        {/* باقي الصفحات على صورة (background.jpg) النقية بدون أي تغطية كحلية */}
         <div style={{
           position: 'relative',
           width: '100%',
-          backgroundImage: 'linear-gradient(rgba(10, 17, 40, 0.45), rgba(10, 17, 40, 0.45)), url(\'/background.jpg\')',
+          backgroundImage: 'url(\'/background.jpg\')',
           backgroundPosition: 'top center',
           backgroundRepeat: 'repeat-y',
           backgroundSize: '100% auto'
@@ -237,72 +237,72 @@ export default function Home() {
           {/* الصفحة 2: نص الدعوة والأسماء */}
           <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div className="direct-text-container">
-              <p style={{ fontSize: '1rem', color: '#d4af37', letterSpacing: '2px', margin: '0 0 0.8rem 0', fontWeight: '700' }}>بكل الحب يدعوكم</p>
+              <p style={{ fontSize: '1rem', color: '#b8860b', letterSpacing: '2px', margin: '0 0 0.8rem 0', fontWeight: '800' }}>بكل الحب يدعوكم</p>
               
-              <h3 style={{ fontSize: '1.2rem', color: '#ffffff', margin: '0.4rem 0', fontWeight: '700' }}>السيد يزن الخطبا</h3>
-              <p style={{ fontSize: '0.9rem', color: '#d4af37', margin: '0' }}>و</p>
-              <h3 style={{ fontSize: '1.2rem', color: '#ffffff', margin: '0.4rem 0 1.2rem 0', fontWeight: '700' }}>السيد خيري نصرالله</h3>
+              <h3 style={{ fontSize: '1.2rem', color: '#0a1128', margin: '0.4rem 0', fontWeight: '800' }}>السيد يزن الخطبا</h3>
+              <p style={{ fontSize: '0.9rem', color: '#b8860b', margin: '0', fontWeight: '700' }}>و</p>
+              <h3 style={{ fontSize: '1.2rem', color: '#0a1128', margin: '0.4rem 0 1.2rem 0', fontWeight: '800' }}>السيد خيري نصرالله</h3>
 
-              <p style={{ fontSize: '1rem', color: '#e5e7eb', margin: '0.8rem 0' }}>لمشاركتنا الاحتفال بزفاف</p>
-              <p style={{ fontSize: '0.9rem', color: '#d4af37', margin: '0 0 0.8rem 0' }}>ابنهم وشقيقهم</p>
+              <p style={{ fontSize: '1rem', color: '#0a1128', margin: '0.8rem 0', fontWeight: '700' }}>لمشاركتنا الاحتفال بزفاف</p>
+              <p style={{ fontSize: '0.9rem', color: '#b8860b', margin: '0 0 0.8rem 0', fontWeight: '700' }}>ابنهم وشقيقهم</p>
 
-              <h1 style={{ fontSize: '2.6rem', fontWeight: '800', color: '#ffffff', margin: '0.5rem 0' }}>محمد & منار</h1>
+              <h1 style={{ fontSize: '2.6rem', fontWeight: '800', color: '#0a1128', margin: '0.5rem 0' }}>محمد & منار</h1>
             </div>
-            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', textShadow: '0 2px 4px #000' }}>↓</div>
+            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#0a1128', fontSize: '1.2rem', textShadow: '0 1px 3px #fff' }}>↓</div>
           </section>
 
           {/* الصفحة 3: الموعد والزفة */}
           <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div className="direct-text-container">
-              <p style={{ fontSize: '0.9rem', color: '#d4af37', letterSpacing: '3px', margin: 0, fontFamily: 'Cinzel', fontWeight: '700' }}>DATE & TIME</p>
-              <h2 style={{ fontSize: '1.4rem', color: '#ffffff', fontWeight: '800', margin: '1rem 0 0.4rem 0' }}>الأربعاء ، 05 أغسطس 2026</h2>
-              <p style={{ fontSize: '0.9rem', color: '#d4af37', fontFamily: 'Cinzel', margin: '0 0 1.5rem 0', fontWeight: '600' }}>Wednesday, August 5, 2026</p>
+              <p style={{ fontSize: '0.9rem', color: '#b8860b', letterSpacing: '3px', margin: 0, fontFamily: 'Cinzel', fontWeight: '800' }}>DATE & TIME</p>
+              <h2 style={{ fontSize: '1.4rem', color: '#0a1128', fontWeight: '800', margin: '1rem 0 0.4rem 0' }}>الأربعاء ، 05 أغسطس 2026</h2>
+              <p style={{ fontSize: '0.9rem', color: '#b8860b', fontFamily: 'Cinzel', margin: '0 0 1.5rem 0', fontWeight: '700' }}>Wednesday, August 5, 2026</p>
               
               <div style={{ width: '50px', height: '1px', backgroundColor: '#d4af37', margin: '1rem auto' }}></div>
               
-              <p style={{ fontSize: '1.1rem', color: '#ffffff', fontWeight: '700', margin: '0.8rem 0' }}>
-                🥁 تبدأ الزفة في تمام الساعة <span style={{ color: '#d4af37' }}>7:30</span> مساءً
+              <p style={{ fontSize: '1.1rem', color: '#0a1128', fontWeight: '800', margin: '0.8rem 0' }}>
+                🥁 تبدأ الزفة في تمام الساعة <span style={{ color: '#b8860b' }}>7:30</span> مساءً
               </p>
             </div>
-            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', textShadow: '0 2px 4px #000' }}>↓</div>
+            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#0a1128', fontSize: '1.2rem', textShadow: '0 1px 3px #fff' }}>↓</div>
           </section>
 
           {/* الصفحة 4: العد التنازلي */}
           <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div className="direct-text-container">
-              <p style={{ fontSize: '1rem', color: '#d4af37', letterSpacing: '4px', fontFamily: 'Cinzel', margin: '0 0 1.5rem 0', fontWeight: '700' }}>COUNTDOWN</p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', direction: 'ltr' }}>
+              <p style={{ fontSize: '1rem', color: '#b8860b', letterSpacing: '4px', fontFamily: 'Cinzel', margin: '0 0 1.5rem 0', fontWeight: '800' }}>COUNTDOWN</p>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', direction: 'ltr', color: '#0a1128' }}>
                 <div>
                   <span className="num-animate" style={{ fontSize: '2.5rem', fontWeight: '800', display: 'block' }}>{timeLeft.days}</span>
-                  <p style={{ fontSize: '0.8rem', color: '#d4af37', margin: 0, fontWeight: '700' }}>أيام</p>
+                  <p style={{ fontSize: '0.8rem', color: '#b8860b', margin: 0, fontWeight: '800' }}>أيام</p>
                 </div>
-                <span style={{ fontSize: '1.8rem', color: '#d4af37' }}>:</span>
+                <span style={{ fontSize: '1.8rem', color: '#b8860b' }}>:</span>
                 <div>
                   <span className="num-animate" style={{ fontSize: '2.5rem', fontWeight: '800', display: 'block' }}>{timeLeft.hours}</span>
-                  <p style={{ fontSize: '0.8rem', color: '#d4af37', margin: 0, fontWeight: '700' }}>ساعات</p>
+                  <p style={{ fontSize: '0.8rem', color: '#b8860b', margin: 0, fontWeight: '800' }}>ساعات</p>
                 </div>
-                <span style={{ fontSize: '1.8rem', color: '#d4af37' }}>:</span>
+                <span style={{ fontSize: '1.8rem', color: '#b8860b' }}>:</span>
                 <div>
                   <span className="num-animate" style={{ fontSize: '2.5rem', fontWeight: '800', display: 'block' }}>{timeLeft.minutes}</span>
-                  <p style={{ fontSize: '0.8rem', color: '#d4af37', margin: 0, fontWeight: '700' }}>دقائق</p>
+                  <p style={{ fontSize: '0.8rem', color: '#b8860b', margin: 0, fontWeight: '800' }}>دقائق</p>
                 </div>
-                <span style={{ fontSize: '1.8rem', color: '#d4af37' }}>:</span>
+                <span style={{ fontSize: '1.8rem', color: '#b8860b' }}>:</span>
                 <div>
                   <span className="num-animate" style={{ fontSize: '2.5rem', fontWeight: '800', display: 'block' }}>{timeLeft.seconds}</span>
-                  <p style={{ fontSize: '0.8rem', color: '#d4af37', margin: 0, fontWeight: '700' }}>ثواني</p>
+                  <p style={{ fontSize: '0.8rem', color: '#b8860b', margin: 0, fontWeight: '800' }}>ثواني</p>
                 </div>
               </div>
             </div>
-            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', textShadow: '0 2px 4px #000' }}>↓</div>
+            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#0a1128', fontSize: '1.2rem', textShadow: '0 1px 3px #fff' }}>↓</div>
           </section>
 
           {/* الصفحة 5: المكان وخرائط جوجل */}
           <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div className="direct-text-container">
               <span style={{ fontSize: '2.2rem' }}>📍</span>
-              <p style={{ fontSize: '0.9rem', color: '#d4af37', letterSpacing: '4px', fontFamily: 'Cinzel', margin: '0.6rem 0 0 0', fontWeight: '700' }}>VENUE</p>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0.6rem 0 0.3rem 0' }}>Yildiz Hall</h2>
-              <p style={{ fontSize: '0.9rem', color: '#e5e7eb', fontFamily: 'Cinzel', margin: '0 0 2rem 0', fontWeight: '600' }}>Black Tie Weddings</p>
+              <p style={{ fontSize: '0.9rem', color: '#b8860b', letterSpacing: '4px', fontFamily: 'Cinzel', margin: '0.6rem 0 0 0', fontWeight: '800' }}>VENUE</p>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: '800', margin: '0.6rem 0 0.3rem 0', color: '#0a1128' }}>Yildiz Hall</h2>
+              <p style={{ fontSize: '0.9rem', color: '#0a1128', fontFamily: 'Cinzel', margin: '0 0 2rem 0', fontWeight: '700' }}>Black Tie Weddings</p>
               
               <a 
                 href="https://maps.google.com" 
@@ -310,7 +310,7 @@ export default function Home() {
                 rel="noopener noreferrer"
                 style={{
                   padding: '0.8rem 1.8rem',
-                  backgroundColor: 'rgba(10, 17, 40, 0.85)',
+                  backgroundColor: '#0a1128',
                   border: '2px solid #d4af37',
                   color: '#d4af37',
                   borderRadius: '30px',
@@ -318,22 +318,22 @@ export default function Home() {
                   fontSize: '0.9rem',
                   fontWeight: '700',
                   fontFamily: 'Cinzel',
-                  boxShadow: '0 5px 20px rgba(0,0,0,0.6)',
+                  boxShadow: '0 5px 15px rgba(10,17,40,0.3)',
                   display: 'inline-block'
                 }}
               >
                 Open in Google Maps 🗺️
               </a>
             </div>
-            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', textShadow: '0 2px 4px #000' }}>↓</div>
+            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#0a1128', fontSize: '1.2rem', textShadow: '0 1px 3px #fff' }}>↓</div>
           </section>
 
-          {/* الصفحة 6: تأكيد الحضور RSVP والملاحظات */}
+          {/* الصفحة 6: تأكيد الحضور RSVP */}
           <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div className="direct-text-container">
-              <h2 style={{ fontSize: '1.6rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0 0 0.8rem 0', fontWeight: '800' }}>RSVP</h2>
+              <h2 style={{ fontSize: '1.6rem', fontFamily: 'Cinzel', color: '#0a1128', margin: '0 0 0.8rem 0', fontWeight: '800' }}>RSVP</h2>
               
-              <p style={{ fontSize: '0.8rem', color: '#e5e7eb', margin: '0 0 1.2rem 0', lineHeight: '1.6' }}>
+              <p style={{ fontSize: '0.85rem', color: '#0a1128', margin: '0 0 1.2rem 0', lineHeight: '1.6', fontWeight: '700' }}>
                 نظرًا لمحدودية المقاعد، نرجو التكرم بتأكيد حضوركم مسبقًا.
               </p>
 
@@ -353,9 +353,9 @@ export default function Home() {
                     value={rsvpData.guests}
                     onChange={(e) => setRsvpData({ ...rsvpData, guests: e.target.value })}
                   >
-                    <option value="1" style={{ background: '#0a1128' }}>1 Guest</option>
-                    <option value="2" style={{ background: '#0a1128' }}>2 Guests</option>
-                    <option value="3" style={{ background: '#0a1128' }}>3 Guests</option>
+                    <option value="1">1 Guest</option>
+                    <option value="2">2 Guests</option>
+                    <option value="3">3 Guests</option>
                   </select>
 
                   <select 
@@ -363,8 +363,8 @@ export default function Home() {
                     value={rsvpData.status}
                     onChange={(e) => setRsvpData({ ...rsvpData, status: e.target.value })}
                   >
-                    <option value="yes" style={{ background: '#0a1128' }}>Will Attend ✨</option>
-                    <option value="no" style={{ background: '#0a1128' }}>Apologize 🤍</option>
+                    <option value="yes">Will Attend ✨</option>
+                    <option value="no">Apologize 🤍</option>
                   </select>
 
                   <button 
@@ -372,15 +372,15 @@ export default function Home() {
                     style={{
                       width: '100%',
                       padding: '0.8rem',
-                      backgroundColor: '#d4af37',
-                      color: '#0a1128',
+                      backgroundColor: '#0a1128',
+                      color: '#d4af37',
                       border: 'none',
                       borderRadius: '8px',
                       fontWeight: '800',
                       fontSize: '0.9rem',
                       cursor: 'pointer',
                       marginTop: '0.4rem',
-                      boxShadow: '0 5px 20px rgba(212, 175, 55, 0.5)'
+                      boxShadow: '0 5px 15px rgba(10,17,40,0.3)'
                     }}
                   >
                     Confirm Attendance
@@ -389,25 +389,25 @@ export default function Home() {
               ) : (
                 <div style={{ padding: '0.8rem 0' }}>
                   <span style={{ fontSize: '2rem' }}>🎉</span>
-                  <p style={{ fontSize: '1rem', color: '#d4af37', fontWeight: '800', marginTop: '0.5rem' }}>شكراً لك! تم تسجيل حضورك بنجاح.</p>
+                  <p style={{ fontSize: '1rem', color: '#0a1128', fontWeight: '800', marginTop: '0.5rem' }}>شكراً لك! تم تسجيل حضورك بنجاح.</p>
                 </div>
               )}
             </div>
-            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#d4af37', fontSize: '1.2rem', textShadow: '0 2px 4px #000' }}>↓</div>
+            <div className="swipe-hint" style={{ position: 'absolute', bottom: '25px', color: '#0a1128', fontSize: '1.2rem', textShadow: '0 1px 3px #fff' }}>↓</div>
           </section>
 
           {/* الصفحة 7 والأخيرة: ملاحظة الأطفال والخاتمة */}
           <section style={{ height: '100vh', width: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <div className="direct-text-container">
               <span style={{ fontSize: '1.8rem' }}>🌙</span>
-              <p style={{ fontSize: '0.9rem', color: '#ffffff', lineHeight: '2', fontWeight: '600', margin: '1rem 0' }}>
+              <p style={{ fontSize: '0.9rem', color: '#0a1128', lineHeight: '2', fontWeight: '700', margin: '1rem 0' }}>
                 حرصًا على راحة الجميع وأجواء الحفل، نعتذر عن استقبال الأطفال، مع تمنياتنا لهم بليلة هادئة وأحلام سعيدة.
               </p>
               
               <div style={{ width: '50px', height: '1px', backgroundColor: '#d4af37', margin: '1.2rem auto' }}></div>
 
-              <h2 style={{ fontSize: '2rem', fontFamily: 'Cinzel', color: '#d4af37', margin: '0.8rem 0 0.3rem 0', fontWeight: '800' }}>Thank You</h2>
-              <p style={{ fontSize: '1rem', color: '#ffffff', fontWeight: '700', margin: 0 }}>
+              <h2 style={{ fontSize: '2rem', fontFamily: 'Cinzel', color: '#0a1128', margin: '0.8rem 0 0.3rem 0', fontWeight: '800' }}>Thank You</h2>
+              <p style={{ fontSize: '1rem', color: '#b8860b', fontWeight: '800', margin: 0 }}>
                 We Can't Wait To Celebrate With You
               </p>
             </div>
