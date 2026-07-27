@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function Home() {
   const [isOpened, setIsOpened] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -14,13 +15,17 @@ export default function Home() {
   const section4 = useRef(null);
   const sections = [section1, section2, section3, section4];
 
-  // دالة فتح الدعوة بتركيز كامل
+  // دالة الفتح مع تأثير التلاشي السلس للمغلف
   const handleOpenInvitation = () => {
-    setIsOpened(true);
+    setIsClosing(true);
     
     if (audioRef.current) {
       audioRef.current.play().catch(error => console.log("Audio play failed", error));
     }
+
+    setTimeout(() => {
+      setIsOpened(true);
+    }, 800); 
   };
 
   // نظام النزول التلقائي (كل 4 ثوانٍ)
@@ -110,34 +115,30 @@ export default function Home() {
           animation: tapMove 1.5s infinite ease-in-out;
         }
 
-        /* تأثير ظهور سلس للدعوة عند الفتح */
-        .invitation-container {
-          opacity: ${isOpened ? '1' : '0'};
-          transform: translateY(${isOpened ? '0' : '20px'});
-          transition: opacity 0.8s ease, transform 0.8s ease;
+        .envelope-screen {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-color: #1a2b4c;
+          background-image: url('/envelope.jpg');
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: contain;
+          z-index: 50;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: opacity 0.8s ease;
+          opacity: ${isClosing ? '0' : '1'};
+          pointer-events: ${isClosing ? 'none' : 'auto'};
         }
       `}</style>
 
-      {/* ================= خلفية المغلف الثابتة والمضبوطة تماماً ================= */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: '#1a2b4c',
-        backgroundImage: 'url(\'/envelope.jpg\')',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'contain',
-        zIndex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-        
-        {/* زر الختم التفاعلي (يختفي فور الضغط عليه) */}
-        {!isOpened && (
+      {/* شاشة المغلف الثابتة والواضحة */}
+      {!isOpened && (
+        <div className="envelope-screen">
           <button 
             onClick={handleOpenInvitation}
             className="wax-seal-container"
@@ -156,19 +157,18 @@ export default function Home() {
               transform: 'translate(-50%, -50%)',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 10
+              alignItems: 'center'
             }}
           >
             <span className="tap-icon" style={{ fontSize: '1.8rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>
               👆
             </span>
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* ================= المحتوى الرئيسي للدعوة (يظهر فوق المغلف بسلاسة) ================= */}
-      <main className="invitation-container" style={{ 
+      {/* المحتوى الرئيسي الثابت والمنظم */}
+      <main style={{ 
         direction: 'rtl',
         height: '100vh',
         overflowY: 'scroll',
@@ -176,9 +176,7 @@ export default function Home() {
         scrollBehavior: 'smooth',
         position: 'relative',
         backgroundColor: '#f8f4ee',
-        zIndex: 2,
-        visibility: isOpened ? 'visible' : 'hidden',
-        pointerEvents: isOpened ? 'auto' : 'none'
+        display: isOpened ? 'block' : 'none'
       }}>
         
         <div style={{
@@ -203,7 +201,6 @@ export default function Home() {
           alignItems: 'center'
         }}>
 
-          {/* القسم الأول */}
           <section ref={section1} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
             <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
               <p style={{ fontSize: '0.75rem', letterSpacing: '2px', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>WEDDING INVITATION</p>
@@ -217,7 +214,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* القسم الثاني */}
           <section ref={section2} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
             <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
               <span style={{ fontSize: '1.5rem' }}>💍</span>
@@ -230,7 +226,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* القسم الثالث */}
           <section ref={section3} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
             <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
               <h2 style={{ fontSize: '1.2rem', color: '#1a2b4c', margin: 0, fontWeight: '700' }}>العد التنازلي</h2>
@@ -251,7 +246,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* القسم الرابع */}
           <section ref={section4} style={{ height: '100vh', width: '100%', maxWidth: '380px', scrollSnapAlign: 'start', scrollSnapStop: 'always', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', paddingTop: '38vh', boxSizing: 'border-box', textAlign: 'center' }}>
             <div style={{ width: '85%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', textShadow: '0 1px 2px rgba(255,255,255,0.85)' }}>
               <span style={{ fontSize: '1.5rem' }}>📍</span>
