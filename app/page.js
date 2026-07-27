@@ -81,32 +81,6 @@ export default function Home() {
           color: #ffffff;
         }
 
-        /* خلفية الدعوة الكحلية الثابتة */
-        .fixed-wedding-bg {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background-image: url('/wedding-bg.jpg');
-          background-position: center center;
-          background-repeat: no-repeat;
-          background-size: cover;
-          z-index: 1;
-        }
-
-        /* طبقة عزل كحلية خفيفة جداً لموازنة الألوان وضمان وضوح النص */
-        .navy-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: rgba(10, 17, 40, 0.25);
-          z-index: 2;
-          pointer-events: none;
-        }
-
         @keyframes pulseNum {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.05); color: #d4af37; }
@@ -129,7 +103,7 @@ export default function Home() {
           max-width: 380px;
           text-align: center;
           box-sizing: border-box;
-          margin-top: 5vh; /* لإزاحة النص ليكون تحت الثريا تماماً */
+          margin-top: 5vh;
           text-shadow: 0 2px 8px rgba(10, 17, 40, 0.9), 0 0 15px rgba(0, 0, 0, 0.7);
         }
 
@@ -148,10 +122,6 @@ export default function Home() {
           backdrop-filter: blur(4px);
         }
       `}</style>
-
-      {/* الصورة والطبقة الكحلية */}
-      <div className="fixed-wedding-bg" />
-      <div className="navy-overlay" />
 
       {/* ================= المغلف ✉️ ================= */}
       <div style={{
@@ -204,7 +174,7 @@ export default function Home() {
         </button>
       </div>
 
-      {/* ================= المحتوى المتتابع ================= */}
+      {/* ================= الحاوية الرئيسية مع خلفية ممتدة مُمَيَّزة ================= */}
       <main 
         ref={mainRef}
         style={{
@@ -215,7 +185,12 @@ export default function Home() {
           overflowY: isOpened ? 'scroll' : 'hidden',
           scrollSnapType: 'y mandatory',
           scrollBehavior: 'smooth',
-          direction: 'rtl'
+          direction: 'rtl',
+          /* جعل خلفية الصورة كحلية وممتدة بشكل متكرر ونظيف على كامل طول الصفحات */
+          backgroundImage: 'linear-gradient(rgba(10, 17, 40, 0.25), rgba(10, 17, 40, 0.25)), url(\'/wedding-bg.jpg\')',
+          backgroundRepeat: 'repeat-y',
+          backgroundSize: '100vw auto',
+          backgroundPosition: 'top center'
         }}
       >
 
