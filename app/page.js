@@ -17,9 +17,11 @@ export default function Home() {
           className="w-full h-screen object-contain cursor-pointer transition-transform duration-700 hover:scale-105"
         />
       ) : (
-        <div className="text-white text-center">
-          Open Invitation
-        </div>
+        <img
+          src="/wedding-bg.jpg"
+          alt="Wedding Invitation"
+          className="w-full h-screen object-contain animate-in fade-in duration-1000"
+        />
       )}
     </main>
   );
