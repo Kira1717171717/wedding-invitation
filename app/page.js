@@ -1,37 +1,26 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-
-import Hero from '../components/Hero';
+import { useState } from "react";
 
 export default function Home() {
-
   const [opened, setOpened] = useState(false);
 
   return (
-
-    <main>
-
+    <main
+      className="min-h-screen bg-[#07182f] flex items-center justify-center overflow-hidden"
+      onClick={() => setOpened(true)}
+    >
       {!opened ? (
-
-        <Hero onOpen={() => setOpened(true)} />
-
+        <img
+          src="/envelope.jpg"
+          alt="Wedding Envelope"
+          className="w-full h-screen object-contain cursor-pointer transition-transform duration-700 hover:scale-105"
+        />
       ) : (
-
-        <div className="coming-soon">
-
-          <h1>Invitation Coming Next...</h1>
-
-          <p>
-            المرحلة القادمة سنضيف الدعوة الكاملة هنا.
-          </p>
-
+        <div className="text-white text-center">
+          Open Invitation
         </div>
-
       )}
-
     </main>
-
   );
-
 }
