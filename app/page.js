@@ -6,12 +6,12 @@ export default function Home() {
   const [opening, setOpening] = useState(false);
   const [opened, setOpened] = useState(false);
 
-  const handleOpen = () => {
+  const openEnvelope = () => {
     setOpening(true);
 
     setTimeout(() => {
       setOpened(true);
-    }, 800);
+    }, 900);
   };
 
   return (
@@ -20,15 +20,12 @@ export default function Home() {
       {!opened && (
         <img
           src="/envelope.jpg"
-          alt="Wedding Envelope"
-          onClick={handleOpen}
+          alt="Envelope"
+          onClick={openEnvelope}
+          className="w-full h-screen object-contain cursor-pointer"
           style={{
-            width: "100%",
-            height: "100vh",
-            objectFit: "contain",
-            cursor: "pointer",
-            transition: "all 0.8s ease",
-            transform: opening ? "scale(1.15)" : "scale(1)",
+            transition: "all 0.9s ease",
+            transform: opening ? "scale(1.08)" : "scale(1)",
             opacity: opening ? 0 : 1,
           }}
         />
@@ -38,23 +35,24 @@ export default function Home() {
         <img
           src="/wedding-bg.jpg"
           alt="Wedding Invitation"
+          className="w-full h-screen object-contain"
           style={{
-            width: "100%",
-            height: "100vh",
-            objectFit: "contain",
-            animation: "fadeIn 1s ease",
+            animation: "cardOpen 1s ease",
           }}
         />
       )}
 
       <style jsx>{`
-        @keyframes fadeIn {
-          from {
+        @keyframes cardOpen {
+          0% {
             opacity: 0;
-            transform: scale(0.95);
+            transform: scale(0.6);
           }
-          to {
+          60% {
             opacity: 1;
+            transform: scale(1.05);
+          }
+          100% {
             transform: scale(1);
           }
         }
